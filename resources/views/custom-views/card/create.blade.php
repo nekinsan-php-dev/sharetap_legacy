@@ -3,126 +3,147 @@
     {{ __('messages.common.register') }}
 @endsection
 @section('content')
-<div style="background:url('https://nekinsan.co/sharetap/public/assets/images/bg-shapes.png'); margin-top: -16px;padding-top: 2rem;">
-   <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10">
-            <div class="card shadow-lg border-0">
-              <div class="card-header text-center py-4" style="background-color: #f8f9fa;">
-                <h2 class="card-title font-weight-bold">Personal Information</h2>
-                <p class="text-muted">Please fill out the form below with accurate information</p>
-              </div>
-              <div class="card-body p-4">
-                <form>
-                  <div class="row g-4">
-                    <!-- First Name -->
-                    <div class="col-md-6">
-                      <label for="first_name" class="form-label">First Name</label>
-                      <input type="text" id="first_name" name="first_name" class="form-control" placeholder="Enter First Name" required>
+<div class="container">
+    <div class="text-center my-5">
+        <x-main-logo class="mb-4"/>
+        <h2 class="text-primary font-weight-bold">Register Your Information</h2>
+        <p class="text-muted">Please fill in the details below to create your profile.</p>
+    </div>
+    <form class="form-custom" action="{{ route('card.tempStore') }}" method="post">
+        @csrf
+        <div class="card shadow border-0 bg-white mb-5">
+            <div class="card-body">
+                <div class="step" id="step1">
+                    <h4 class="mb-4 text-primary">Step 1: Personal Information</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="first_name" class="text-dark">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter First Name" required style="border-radius: 10px;">
+                                @error('first_name') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="last_name" class="text-dark">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Last Name" required style="border-radius: 10px;">
+                                @error('last_name') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="date_of_birth" class="text-dark">Date of Birth</label>
+                                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required style="border-radius: 10px;">
+                                @error('date_of_birth') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="gender" class="text-dark">Gender</label>
+                                <select class="form-control" id="gender" name="gender" required style="border-radius: 10px;">
+                                    <option value="" selected disabled>Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                @error('gender') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="email" class="text-dark">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" required style="border-radius: 10px;">
+                                @error('email') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="mobile_number" class="text-dark">Mobile Number</label>
+                                <input type="text" class="form-control" id="mobile_number" name="mobile_number" placeholder="Enter Mobile Number" required style="border-radius: 10px;">
+                                @error('mobile_number') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
                     </div>
-                    <!-- Last Name -->
-                    <div class="col-md-6">
-                      <label for="last_name" class="form-label">Last Name</label>
-                      <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Enter Last Name" required>
+                </div>
+                <div class="step d-none" id="step2">
+                    <h4 class="mb-4 text-primary">Step 2: Additional Information</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="occupation" class="text-dark">Occupation</label>
+                                <input type="text" class="form-control" id="occupation" name="occupation" placeholder="Enter Occupation" style="border-radius: 10px;">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="company_name" class="text-dark">Company Name (optional)</label>
+                                <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Enter Company Name" style="border-radius: 10px;">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="alternate_email" class="text-dark">Alternate Email</label>
+                                <input type="email" class="form-control" id="alternate_email" name="alternate_email" placeholder="Enter Alternate Email" style="border-radius: 10px;">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="location" class="text-dark">Location</label>
+                                <input type="text" class="form-control" id="location" name="location" placeholder="Enter Location" required style="border-radius: 10px;">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="description" class="text-dark">Description</label>
+                                <textarea class="form-control" id="description" name="description" placeholder="Enter Description" rows="3" style="border-radius: 10px;"></textarea>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Date of Birth -->
-                    <div class="col-md-6">
-                      <label for="date_of_birth" class="form-label">Date of Birth</label>
-                      <div class="input-group">
-                        <input type="text" id="date_of_birth" name="date_of_birth" class="form-control" placeholder="Pick a date">
-                        <span class="input-group-text">
-                          <i class="bi bi-calendar"></i>
-                        </span>
-                      </div>
-                    </div>
-                    <!-- Gender -->
-                    <div class="col-md-6">
-                      <label for="gender" class="form-label">Gender</label>
-                      <select id="gender" name="gender" class="form-select">
-                        <option selected disabled>Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
-                    <!-- Occupation -->
-                    <div class="col-md-6">
-                      <label for="occupation" class="form-label">Occupation</label>
-                      <input type="text" id="occupation" name="occupation" class="form-control" placeholder="Enter Occupation">
-                    </div>
-                    <!-- Company Name -->
-                    <div class="col-md-6">
-                      <label for="company_name" class="form-label">Company Name (optional)</label>
-                      <input type="text" id="company_name" name="company_name" class="form-control" placeholder="Enter Company Name">
-                    </div>
-                    <!-- Email -->
-                    <div class="col-md-6">
-                      <label for="email" class="form-label">Email</label>
-                      <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email" required>
-                    </div>
-                    <!-- Alternate Email -->
-                    <div class="col-md-6">
-                      <label for="alternate_email" class="form-label">Alternate Email</label>
-                      <input type="email" id="alternate_email" name="alternate_email" class="form-control" placeholder="Enter Alternate Email">
-                    </div>
-                    <!-- Mobile Number -->
-                    <div class="col-md-6">
-                      <label for="mobile_number" class="form-label">Mobile Number</label>
-                      <input type="text" id="mobile_number" name="mobile_number" class="form-control" placeholder="Enter Mobile Number" required>
-                    </div>
-                    <!-- Alternate Mobile Number -->
-                    <div class="col-md-6">
-                      <label for="alternate_mobile_number" class="form-label">Alternate Mobile Number</label>
-                      <input type="text" id="alternate_mobile_number" name="alternate_mobile_number" class="form-control" placeholder="Enter Alternate Mobile Number">
-                    </div>
-                    <!-- Location -->
-                    <div class="col-md-6">
-                      <label for="location" class="form-label">Location</label>
-                      <input type="text" id="location" name="location" class="form-control" placeholder="Enter Location" required>
-                    </div>
-                    <!-- Location URL -->
-                    <div class="col-md-6">
-                      <label for="location_url" class="form-label">Location URL</label>
-                      <input type="text" id="location_url" name="location_url" class="form-control" placeholder="Enter Location URL">
-                    </div>
-                    <!-- Description -->
-                    <div class="col-12">
-                      <label for="description" class="form-label">Description</label>
-                      <textarea id="description" name="description" class="form-control" rows="3" placeholder="Enter Description"></textarea>
-                    </div>
-                  </div>
-                  <!-- Form Switches -->
-                  <div class="mt-4">
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="enable_enquiry_form" name="enable_enquiry_form">
-                      <label class="form-check-label" for="enable_enquiry_form">Enable Inquiry Form</label>
-                    </div>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="enable_download_qr_code" name="enable_download_qr_code">
-                      <label class="form-check-label" for="enable_download_qr_code">Enable Download QR Code</label>
-                    </div>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="show_qr_code" name="show_qr_code">
-                      <label class="form-check-label" for="show_qr_code">Show QR Code</label>
-                    </div>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="enable_addcontact" name="enable_addcontact">
-                      <label class="form-check-label" for="enable_addcontact">Enable Add to Contact</label>
-                    </div>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="whatsapp_share" name="whatsapp_share">
-                      <label class="form-check-label" for="whatsapp_share">WhatsApp Share</label>
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <div class="card-footer text-center py-4">
-                <button type="submit" class="btn btn-primary w-100 w-sm-auto">Next</button>
-              </div>
+                </div>
             </div>
-          </div>
+            <div class="card-footer border-1 d-flex justify-content-between py-4">
+                <button type="button" class="btn btn-outline-primary px-5 d-none" id="prevStep">
+                    <i class="fas fa-arrow-left mr-2"></i>Previous
+                </button>
+                <button type="button" class="btn btn-primary px-5" id="nextStep">
+                    Next<i class="fas fa-arrow-right ml-2"></i>
+                </button>
+                <button type="submit" class="btn btn-success px-5 d-none" id="submitBtn">
+                    <i class="fas fa-check mr-2"></i>Submit
+                </button>
+            </div>
         </div>
-      </div>
-   </div>
+    </form>
 </div>
+
+<style>
+   
+    .container {
+        max-width: 800px;
+    }
+</style>
+
+<script>
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const prevBtn = document.getElementById('prevStep');
+    const nextBtn = document.getElementById('nextStep');
+    const submitBtn = document.getElementById('submitBtn');
+
+    nextBtn.addEventListener('click', function() {
+        step1.classList.add('d-none');
+        step2.classList.remove('d-none');
+        prevBtn.classList.remove('d-none');
+        this.classList.add('d-none');
+        submitBtn.classList.remove('d-none');
+    });
+
+    prevBtn.addEventListener('click', function() {
+        step2.classList.add('d-none');
+        step1.classList.remove('d-none');
+        nextBtn.classList.remove('d-none');
+        this.classList.add('d-none');
+        submitBtn.classList.add('d-none');
+    });
+</script>
 @endsection

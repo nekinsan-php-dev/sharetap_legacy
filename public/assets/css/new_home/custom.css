@@ -41,8 +41,6 @@
 body {
     font-family: rubik;
     font-weight: 400;
-    background: #000;
-    color: #fff !important; 
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
 body::-webkit-scrollbar {
@@ -78,7 +76,7 @@ ul {
 
 .btn-white {
     background-color: #fff;
-    border: 1px solid #FFC107;
+    border: 1px solid  #700ee7;
     color: #000
 }
 
@@ -87,7 +85,7 @@ ul {
 .btn-white:active,
 .btn-white:focus,
 .btn-white:hover {
-    background-color: #FFC107;
+    background-color:  #700ee7;
     border: 1px solid #fff;
     color: #fff
 }
@@ -106,8 +104,8 @@ ul {
 .btn-primary-light:active,
 .btn-primary-light:focus,
 .btn-primary-light:hover {
-    background-color: #ffc107;
-    border: 1px solid #ffc107;
+    background-color:  #700ee7;
+    border: 1px solid  #700ee7;
     color: #000
 }
 
@@ -203,7 +201,7 @@ h2 {
 }
 
 /*.section-heading h2:after {*/
-/*    background-color: #FFC107;*/
+/*    background-color:  #700ee7;*/
 /*    border-radius: 2px;*/
 /*    bottom: -4px;*/
 /*    content: "";*/
@@ -288,7 +286,7 @@ h2 {
 }
 
 .bg-light {
-    background-color: #ffc1072b !important;
+    background-color:  #700ee72b !important;
 }
 
 .text-black {
@@ -304,7 +302,7 @@ h2 {
 }
 
 .bg-primary {
-    background-color: #ffc107 !important
+    background-color:  #700ee7 !important
 }
 
 .form-control {
@@ -341,8 +339,8 @@ mark {
 
 .slick-arrow {
     align-items: center;
-    background-color: #FFC107;
-    border: 1px solid #FFC107;
+    background-color:  #700ee7;
+    border: 1px solid  #700ee7;
     border-radius: 50%;
     color: #fff;
     display: flex;
@@ -366,8 +364,8 @@ mark {
 .slick-arrow:focus,
 .slick-arrow:hover {
     background-color: transparent;
-    border: 1px solid #FFC107;
-    color: #FFC107
+    border: 1px solid  #700ee7;
+    color:  #700ee7
 }
 
 .vcard-template-section .vcard-bg {
@@ -684,7 +682,7 @@ mark {
     width: 120px
 }
 .contact-icon.fs-2.d-flex.align-items-center.justify-content-center svg path {
-    fill: #FFC107 !important;
+    fill:  #700ee7 !important;
 }
 form#myForm {
     position: relative;

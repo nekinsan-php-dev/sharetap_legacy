@@ -20460,7 +20460,7 @@ ul {
 }
 
 .header {
-    /*background-color: #000;*/
+    background-color: #000;
     box-shadow: 0 0 20px rgba(173, 181, 189, .1);
     height: 70px;
     padding: 0

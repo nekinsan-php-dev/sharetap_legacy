@@ -326,6 +326,7 @@ class CardController extends Controller
     public function tempStoreStepThree()
     {
         $user = session()->get('user_details');
+        
         return view('custom-views.card.create-step-3',compact('user'));
     }
 
@@ -345,8 +346,6 @@ class CardController extends Controller
         $user['delivery_address'] =  $request->delivery_address ?? '';
         $user['profile_img'] = $this->handleImageUpload($request, 'profile_img', 'images/avatar.png');
         $user['cover_img'] = $this->handleImageUpload($request, 'cover_img', 'images/cover.jpg');
-
-//        dd($user);
 
         $userData = User::create($user)->assignRole(Role::ROLE_USER);
 
@@ -602,8 +601,8 @@ class CardController extends Controller
     }
 
     public function cardCheckout(Request $request){
-
         $userData = session()->get('logged_user_data');
+
         $user = User::find($userData->id);
 
         $user->update([

@@ -23,29 +23,6 @@
 <body>
     <div
         class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed authImage">
-        <!--<div class="dropdown ms-auto z-index-9">-->
-        <!--    <button type="button" title="Active" class="dropdown-toggle hide-arrow btn btn btn-info m-7 mb-5 pl-2"-->
-        <!--        id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">-->
-        <!--        {{ getLanguageByKey(checkFrontLanguageSession()) }} <i class="fa  fa-language"></i>-->
-        <!--    </button>-->
-        <!--    <ul class="dropdown-menu min-width-220" aria-labelledby="dropdownMenuButton1"-->
-        <!--        style="max-height: 380px;overflow: auto;">-->
-        <!--        @foreach (getAllLanguage() as $key => $value)-->
-        <!--            <li style="padding: 0px"-->
-        <!--                class="dropdown-item languageSelection padding {{ checkFrontLanguageSession() == $key ? 'active' : '' }}"-->
-        <!--                data-prefix-value="{{ $key }}"><a-->
-        <!--                    class=" dropdown-item {{ checkFrontLanguageSession() == $key ? 'active' : '' }}"-->
-        <!--                    class="text-decoration-none" data-id="{{ $key }}"-->
-        <!--                    href="javascript:void(0)">{{ $value }}</a>-->
-        <!--            </li>-->
-        <!--        @endforeach-->
-        <!--    </ul>-->
-        <!--</div>-->
-
-        <ul>
-
-        </ul>
-
 
         @yield('content')
     </div>
