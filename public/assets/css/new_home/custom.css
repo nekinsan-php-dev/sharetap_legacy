@@ -46,7 +46,7 @@ body {
 body::-webkit-scrollbar {
     display: none;
 }
- 
+
 ul {
     list-style: none;
     padding-left: 0
@@ -76,7 +76,7 @@ ul {
 
 .btn-white {
     background-color: #fff;
-    border: 1px solid  #700ee7;
+    border: 1px solid  #262262;
     color: #000
 }
 
@@ -85,7 +85,7 @@ ul {
 .btn-white:active,
 .btn-white:focus,
 .btn-white:hover {
-    background-color:  #700ee7;
+    background-color:  #262262;
     border: 1px solid #fff;
     color: #fff
 }
@@ -104,8 +104,8 @@ ul {
 .btn-primary-light:active,
 .btn-primary-light:focus,
 .btn-primary-light:hover {
-    background-color:  #700ee7;
-    border: 1px solid  #700ee7;
+    background-color:  #262262;
+    border: 1px solid  #262262;
     color: #000
 }
 
@@ -201,7 +201,7 @@ h2 {
 }
 
 /*.section-heading h2:after {*/
-/*    background-color:  #700ee7;*/
+/*    background-color:  #262262;*/
 /*    border-radius: 2px;*/
 /*    bottom: -4px;*/
 /*    content: "";*/
@@ -286,7 +286,7 @@ h2 {
 }
 
 .bg-light {
-    background-color:  #700ee72b !important;
+    background-color:  #2622622b !important;
 }
 
 .text-black {
@@ -298,11 +298,11 @@ h2 {
 }
 
 .text-primary {
-    color: #7638f9 !important
+    color: #262262 !important
 }
 
 .bg-primary {
-    background-color:  #700ee7 !important
+    background-color:  #262262 !important
 }
 
 .form-control {
@@ -328,7 +328,7 @@ h2 {
 
 mark {
     background-color: transparent;
-    color: #7638f9
+    color: #262262
 }
 
 @media (max-width:767px) {
@@ -339,8 +339,8 @@ mark {
 
 .slick-arrow {
     align-items: center;
-    background-color:  #700ee7;
-    border: 1px solid  #700ee7;
+    background-color:  #262262;
+    border: 1px solid  #262262;
     border-radius: 50%;
     color: #fff;
     display: flex;
@@ -364,8 +364,8 @@ mark {
 .slick-arrow:focus,
 .slick-arrow:hover {
     background-color: transparent;
-    border: 1px solid  #700ee7;
-    color:  #700ee7
+    border: 1px solid  #262262;
+    color:  #262262
 }
 
 .vcard-template-section .vcard-bg {
@@ -682,7 +682,7 @@ mark {
     width: 120px
 }
 .contact-icon.fs-2.d-flex.align-items-center.justify-content-center svg path {
-    fill:  #700ee7 !important;
+    fill:  #262262 !important;
 }
 form#myForm {
     position: relative;

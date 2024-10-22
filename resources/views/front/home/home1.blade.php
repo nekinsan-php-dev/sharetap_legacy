@@ -320,46 +320,95 @@
 
         <!-- Plans End Here -->
 
-        <!-- start contact section -->
-        <section class="contact-section pt-100 pb-100 bg-light" id="frontContactUsTab">
+        <section class="about-section py-5 bg-light" id="aboutUsTab">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-12 col-lg-10">
+                    <div class="col-12 col-lg-8">
                         <div class="section-heading text-center mb-5">
-                            <h2 class="font-weight-700 text-primary">{{ __('messages.vcard_11.get_in_touch') }}</h2>
-                            <p class="lead text-muted">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+                            <h2 class="font-weight-700 text-primary">{{ __('messages.about_us.about_us') }}</h2>
+                            <p class="lead text-muted">Empowering individuals and businesses with innovative digital identity solutions.</p>
                         </div>
                     </div>
                 </div>
                 <div class="row g-5 align-items-center">
+                    <!-- About Content -->
                     <div class="col-12 col-lg-6">
-                        <div class="contact-info bg-white p-5 rounded-3 shadow-sm">
+                        <div class="about-info bg-white p-4 p-lg-5 rounded-4 shadow-sm">
+                            <h3 class="h3 text-primary mb-4">Our Mission</h3>
+                            <p class="text-muted mb-4">
+                                ShareTap revolutionizes professional and personal profile sharing. We provide seamless, contactless solutions with personalized NFC cards that bring profiles to life with just a tap. Our goal: make digital identity sharing efficient and innovative for everyone.
+                            </p>
+                            <h3 class="h3 text-primary mb-4">Our Vision</h3>
+                            <p class="text-muted mb-4">
+                                We aim to be the leading platform for digital identity sharing, fostering trust and effective connections in our digital world. With 30+ templates, customization options, and cutting-edge NFC technology, ShareTap is transforming self-presentation.
+                            </p>
+                            <a href="#" class="btn btn-primary btn-lg">Learn More</a>
+                        </div>
+                    </div>
+                    <!-- About Image -->
+                    <div class="col-12 col-lg-6">
+                        <div class="about-image position-relative overflow-hidden rounded-4 shadow-sm">
+                            <img src="https://infyvcards-demo.nyc3.digitaloceanspaces.com/aboutUs/5228/Rectangle-644-(4).png" alt="About ShareTap" class="img-fluid w-100">
+                            <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-primary bg-opacity-75">
+                                <h3 class="text-white fs-2">Innovating Digital Identity</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- start contact section -->
+        <section class="contact-section py-5 bg-white" id="frontContactUsTab">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-8">
+                        <div class="section-heading text-center mb-5">
+                            <h4 class="font-weight-700 text-primary">{{ __('messages.vcard_11.get_in_touch') }}</h4>
+                            <p class="lead text-muted">We're here to help. Send us a message and we'll respond promptly.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-4 align-items-stretch">
+                    <div class="col-12 col-lg-5">
+                        <div class="contact-info bg-light p-4 p-lg-5 rounded-4 shadow-sm h-100">
+                            <h3 class="h3 text-primary mb-4">Contact Information</h3>
                             <div class="d-flex align-items-center mb-4">
-                                <div class="contact-icon fs-2 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle me-3" style="width: 60px; height: 60px;">
+                                <div class="contact-icon fs-4 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle me-3" style="width: 50px; height: 50px;">
                                     <i class="fa-solid fa-location-dot"></i>
                                 </div>
                                 <p class="fs-5 mb-0">{{ $setting['address'] }}</p>
                             </div>
                             <div class="d-flex align-items-center mb-4">
-                                <div class="contact-icon fs-2 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle me-3" style="width: 60px; height: 60px;">
+                                <div class="contact-icon fs-4 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle me-3" style="width: 50px; height: 50px;">
                                     <i class="fa-solid fa-at"></i>
                                 </div>
                                 <a href="mailto:{{ $setting['email'] }}" class="fs-5 text-decoration-none text-dark">{{ $setting['email'] }}</a>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <div class="contact-icon fs-2 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle me-3" style="width: 60px; height: 60px;">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="contact-icon fs-4 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle me-3" style="width: 50px; height: 50px;">
                                     <i class="fa-solid fa-phone"></i>
                                 </div>
                                 <a href="tel:{{ $setting['phone'] }}" class="fs-5 text-decoration-none text-dark">{{ '+' . $setting['prefix_code'] . ' ' . $setting['phone'] }}</a>
                             </div>
+                            <div class="mt-5">
+                                <h4 class="h5 mb-3">Follow Us</h4>
+                                <div class="d-flex gap-3">
+                                    <a href="#" class="btn btn-outline-primary "><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#" class="btn btn-outline-primary "><i class="fab fa-twitter"></i></a>
+                                    <a href="#" class="btn btn-outline-primary "><i class="fab fa-linkedin-in"></i></a>
+                                    <a href="#" class="btn btn-outline-primary "><i class="fab fa-instagram"></i></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6">
-                        <form class="contact-form bg-white p-5 rounded-3 shadow-sm" id="myForm">
+                    <div class="col-12 col-lg-7">
+                        <form class="contact-form bg-light p-4 p-lg-5 rounded-4 shadow-sm h-100" id="myForm">
                             @csrf
                             <div id="contactError" class="alert alert-danger d-none"></div>
 
-                            <h3 class="h4 mb-4 text-center">{{ __('messages.contact_us.send_message') }}</h3>
+                            <h3 class="h3 text-primary mb-4">Send Us a Message</h3>
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="form-floating">
