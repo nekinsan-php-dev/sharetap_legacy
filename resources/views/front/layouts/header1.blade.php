@@ -29,10 +29,11 @@
                 </ul>
                 <ul class="navbar-nav align-items-center">
 
+
+                    @if (empty(getLogInUser()))
                     <li class="nav-item">
                         <a class="btn btn-primary me-2 hover-text-white" href="{{ route('card.create') }}" role="button">Create New Card</a>
                     </li>
-                    @if (empty(getLogInUser()))
                         <li class="nav-item sign-in-btn">
                             <a class="btn btn-outline-secondary" href="{{ route('user.login') }}" role="button">{{ __('auth.sign_in') }}</a>
                         </li>
