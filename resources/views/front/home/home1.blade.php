@@ -222,83 +222,9 @@
                                     <ul class="list-unstyled mb-4">
                                         <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Services</li>
                                         <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Testimonials</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Hide Branding</li>
                                         <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Enquiry Form</li>
                                         <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Social Links</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Password Protection</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Custom Fonts</li>
                                         <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Products</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Appointments</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Gallery</li>
-                                    </ul>
-                                    <div class="text-center mt-auto">
-                                        <a href="{{ url('card/create?plan=' . $plan->id ?? '1') }}"
-                                           class="btn btn-primary btn-lg rounded-pill px-5 py-3 font-weight-bold shadow-sm"
-                                           data-id="{{ $plan->id }}"
-                                           data-plan-price="{{ $plan->price }}"
-                                           data-turbo="false">
-                                            Choose Plan
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card pricing-card h-100 shadow-lg border-0 border-r-15 hover-scale">
-                                <div class="card-body d-flex flex-column">
-                                    <h3 class="card-title text-primary text-center mb-4 font-weight-bold">{{ $plan->name ?? 'Plan Name' }}</h3>
-                                    <div class="price-wrapper text-center mb-4">
-                                        <span class="display-4 font-weight-bold">₹{{ $plan->price ?? '' }}</span>
-                                        <small class="text-muted">/ {{ $plan->frequency == 1 ? 'Month' : 'Year' }}</small>
-                                    </div>
-                                    <p class="text-center mb-4">
-                                        <span class="badge bg-primary px-3 py-2 rounded-pill">{{ $plan->no_of_vcards ?? '' }} ShareTaps</span>
-                                    </p>
-                                    <ul class="list-unstyled mb-4">
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Services</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Testimonials</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Hide Branding</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Enquiry Form</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Social Links</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Password Protection</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Custom Fonts</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Products</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Appointments</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Gallery</li>
-                                    </ul>
-                                    <div class="text-center mt-auto">
-                                        <a href="{{ url('card/create?plan=' . $plan->id ?? '1') }}"
-                                           class="btn btn-primary btn-lg rounded-pill px-5 py-3 font-weight-bold shadow-sm"
-                                           data-id="{{ $plan->id }}"
-                                           data-plan-price="{{ $plan->price }}"
-                                           data-turbo="false">
-                                            Choose Plan
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card pricing-card h-100 shadow-lg border-0 border-r-15 hover-scale">
-                                <div class="card-body d-flex flex-column">
-                                    <h3 class="card-title text-primary text-center mb-4 font-weight-bold">{{ $plan->name ?? 'Plan Name' }}</h3>
-                                    <div class="price-wrapper text-center mb-4">
-                                        <span class="display-4 font-weight-bold">₹{{ $plan->price ?? '' }}</span>
-                                        <small class="text-muted">/ {{ $plan->frequency == 1 ? 'Month' : 'Year' }}</small>
-                                    </div>
-                                    <p class="text-center mb-4">
-                                        <span class="badge bg-primary px-3 py-2 rounded-pill">{{ $plan->no_of_vcards ?? '' }} ShareTaps</span>
-                                    </p>
-                                    <ul class="list-unstyled mb-4">
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Services</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Testimonials</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Hide Branding</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Enquiry Form</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Social Links</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Password Protection</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Custom Fonts</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Products</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Appointments</li>
                                         <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Gallery</li>
                                     </ul>
                                     <div class="text-center mt-auto">
