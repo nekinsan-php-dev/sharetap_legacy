@@ -203,15 +203,15 @@
         <section class="pricing-plan-section py-5" id="frontPricingTab">
             <div class="container">
                 <div class="section-heading text-center mb-5">
-                    <h2 class="font-weight-700 text-primary">Pricing Plans</h2>
+                    <h2 class="font-weight-bold text-primary">Pricing Plans</h2>
                     <p class="text-muted">Choose a plan that's right for you</p>
                 </div>
                 <div class="row justify-content-center">
                     @foreach ($plans as $plan)
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card pricing-card h-100 shadow-lg border-0 border-r-15 hover-scale">
-                                <div class="card-body d-flex flex-column">
-                                    <h3 class="card-title text-primary text-center mb-4 font-weight-bold">{{ $plan->name ?? 'Plan Name' }}</h3>
+                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                            <div class="card pricing-card h-100 shadow-lg border-0 border-radius-lg hover-scale">
+                                <div class="card-body d-flex flex-column p-4">
+                                    <h3 class="card-title text-primary text-center mb-3 font-weight-bold">{{ $plan->name ?? 'Plan Name' }}</h3>
                                     <div class="price-wrapper text-center mb-4">
                                         <span class="display-4 font-weight-bold">₹{{ $plan->price ?? '' }}</span>
                                         <small class="text-muted">/ {{ $plan->frequency == 1 ? 'Month' : 'Year' }}</small>
@@ -219,17 +219,34 @@
                                     <p class="text-center mb-4">
                                         <span class="badge bg-primary px-3 py-2 rounded-pill">{{ $plan->no_of_vcards ?? '' }} ShareTaps</span>
                                     </p>
+                                    @php
+                                        $features = [
+                                            'logo' => 'Custom Logo on NFC Card',
+                                            'name' => 'Custom Name on NFC Card',
+                                            'templates' => ($plan->planFeature->templates > 0 ? "{$plan->planFeature->templates} Profile Template Designs" : 'No Profile Template Designs'),
+                                            'nfc_designes' => ($plan->planFeature->nfc_designes > 0 ? "{$plan->planFeature->nfc_designes} ShareTap Card Designs" : 'No ShareTap Card Designs'),
+                                            'services' => 'Services',
+                                            'testimonials' => 'Testimonials',
+                                            'enquiry_form' => 'Enquiry Form',
+                                            'social_links' => 'Social Links',
+                                            'products' => 'Products',
+                                            'gallery' => 'Gallery',
+                                        ];
+                                    @endphp
+
                                     <ul class="list-unstyled mb-4">
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Services</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Testimonials</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Enquiry Form</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Social Links</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Products</li>
-                                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Gallery</li>
+                                        @foreach ($features as $feature => $label)
+                                            <li class="mb-2">
+                                                {!! $plan->planFeature->$feature == 1 || $plan->planFeature->$feature > 0
+                                                    ? "<i class='fas fa-check-circle text-success me-2'></i> $label"
+                                                    : "<i class='fas fa-times-circle text-danger me-2'></i> $label" !!}
+                                            </li>
+                                        @endforeach
                                     </ul>
+
                                     <div class="text-center mt-auto">
                                         <a href="{{ url('card/create?plan=' . $plan->id ?? '1') }}"
-                                           class="btn btn-primary btn-lg rounded-pill px-5 py-3 font-weight-bold shadow-sm"
+                                           class="btn btn-primary btn-lg rounded-pill px-4 py-2 font-weight-bold shadow-sm"
                                            data-id="{{ $plan->id }}"
                                            data-plan-price="{{ $plan->price }}"
                                            data-turbo="false">
@@ -243,6 +260,7 @@
                 </div>
             </div>
         </section>
+
 
         <!-- Plans End Here -->
 
