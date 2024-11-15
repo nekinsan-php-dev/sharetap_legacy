@@ -214,7 +214,7 @@
                                     <h3 class="card-title text-primary text-center mb-3 font-weight-bold">{{ $plan->name ?? 'Plan Name' }}</h3>
                                     <div class="price-wrapper text-center mb-4">
                                         <span class="display-4 font-weight-bold">₹{{ $plan->price ?? '' }}</span>
-                                        <small class="text-muted">/ {{ $plan->frequency == 1 ? 'Month' : 'Year' }}</small>
+                                        <small class="text-muted">/ {{ $plan->frequency == 1 ? 'Year' : 'Year' }}</small>
                                     </div>
                                     <p class="text-center mb-4">
                                         <span class="badge bg-primary px-3 py-2 rounded-pill">{{ $plan->no_of_vcards ?? '' }} ShareTaps</span>
