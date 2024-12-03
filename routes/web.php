@@ -8,7 +8,6 @@ use App\Http\Livewire\NfcOrdersTable;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PhonepeController;
 use App\Http\Controllers\NfcController;
-use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlanController;
@@ -75,6 +74,11 @@ use App\Http\Controllers\VcardSubscribersController;
 //Route::get('/', function () {
 //    return (!Auth::check()) ? \redirect(route('login')) : Redirect::to(getDashboardURL());
 //});
+
+
+
+
+
 Route::get('/', function () {
     return (! Auth::check()) ? \redirect(route('login')) : Redirect::to('/');
 });
@@ -82,7 +86,7 @@ Route::get('/', function () {
 //social logins
 Route::get('/login/{provider}', [SocialAuthController::class, 'redirectToSocial'])->name('social.login');
 Route::get('/login/{provider}/callback', [SocialAuthController::class, 'handleSocialCallback']);
-
+Route::get('/nfc-cards', [NfcController::class, 'nfcCards'])->name('nfc-cards');
 
 // refund policy
 Route::get('refund-policy', [HomeController::class, 'refundPolicy'])->name('refund.policy');
@@ -162,8 +166,8 @@ Route::middleware('auth', 'valid.user')->group(function () {
 
             //paystack routes
             Route::get('paystack-onboard', [PaystackController::class, 'redirectToGateway'])->name('paystack.init');
-            Route::get('paystack-payment-success',[PaystackController::class, 'handleGatewayCallback'])->name('paystack.success');
-            Route::get('paystack-user-payment-success',[UserPaystackController::class, 'handleGatewayCallback'])->name('paystack.user.success');
+            Route::get('paystack-payment-success', [PaystackController::class, 'handleGatewayCallback'])->name('paystack.success');
+            Route::get('paystack-user-payment-success', [UserPaystackController::class, 'handleGatewayCallback'])->name('paystack.user.success');
             //razorpay routes
             Route::get('razorpay-onboard', [RazorpayController::class, 'onBoard'])->name('razorpay.init');
             Route::post('razorpay-payment-success', [RazorpayController::class, 'paymentSuccess'])
@@ -201,7 +205,8 @@ Route::middleware('auth', 'valid.user')->group(function () {
                     [ScheduleAppointmentController::class, 'appointmentCalendar']
                 )->name('appointments.calendar');
                 Route::delete('appointment/{appointment}', [
-                    ScheduleAppointmentController::class, 'destroy',
+                    ScheduleAppointmentController::class,
+                    'destroy',
                 ])->name('appointments.destroy')->middleware('checkVcardEnquiry');
                 Route::get('/appointment-status', [ScheduleAppointmentController::class, 'paymentStatus'])->name('payment.status');
 
@@ -366,7 +371,7 @@ Route::middleware('auth', 'valid.user')->group(function () {
     });
 
     Route::prefix('sadmin')->middleware('role:super_admin')->group(function () {
-        Route::get('/generate-sitemap',[SettingController::class, 'generateSitemap'])->name('generateSitemap');
+        Route::get('/generate-sitemap', [SettingController::class, 'generateSitemap'])->name('generateSitemap');
         //dashboard chart
         Route::post('/dashboard-plan-chart', [DashboardController::class, 'planChartData'])->name('dashboard.plan-chart');
         Route::post('/dashboard-income-chart', [DashboardController::class, 'incomeChartData'])->name('dashboard.income-chart');
@@ -396,7 +401,9 @@ Route::middleware('auth', 'valid.user')->group(function () {
         //FAQs
         Route::resource('/frontFaqs', FrontFAQsController::class);
         Route::post(
-            'frontFaqs/{id}/update',[FrontFAQsController::class, 'update'])->name('frontFaqs.updateData');
+            'frontFaqs/{id}/update',
+            [FrontFAQsController::class, 'update']
+        )->name('frontFaqs.updateData');
 
         //testimonials
         Route::resource('/frontTestimonials', FrontTestimonialController::class);
@@ -421,12 +428,7 @@ Route::middleware('auth', 'valid.user')->group(function () {
         //affiliate Users
         Route::get('/affiliate-users', [AffiliateUserController::class, 'index'])->name('sadmin.affiliate-user.index');
         //affiliation withdraw
-        Route::get(
-            '/affiliation-transactions',
-            [
-                AffiliationWithdrawController::class, 'affiliationWithdraw',
-            ]
-        )->name('sadmin.affiliation-transaction.index');
+        Route::get('/affiliation-transactions',[AffiliationWithdrawController::class,'affiliationWithdraw',])->name('sadmin.affiliation-transaction.index');
         //Withdraw transaction
         Route::get(
             '/withdraw-transactions',
@@ -469,7 +471,7 @@ Route::middleware('auth', 'valid.user')->group(function () {
         // Setting routes
         //        contact us
         Route::get('inquiries', [HomeController::class, 'showContactUs'])->name('contact.contactus');
-        Route::delete('inquiries/{enquiry}',[HomeController::class, 'destroyContactUs'])->name('contactus.destroy');
+        Route::delete('inquiries/{enquiry}', [HomeController::class, 'destroyContactUs'])->name('contactus.destroy');
 
         Route::get('theme-configuration', [HomeController::class, 'themeConfiguration'])->name('themeConfiguration');
 
@@ -484,7 +486,8 @@ Route::middleware('auth', 'valid.user')->group(function () {
 
         Route::get('/front-cms', [SettingController::class, 'frontCmsIndex'])->name('setting.front.cms');
         Route::post('/front-cms', [
-            SettingController::class, 'frontCmsUpdate',
+            SettingController::class,
+            'frontCmsUpdate',
         ])->name('setting.front.cms.update')->withoutMiddleware([XSS::class]);
         Route::get('/email-subscriptions', [EmailSubscriptionController::class, 'index'])->name('email.sub.index');
         Route::delete(
@@ -534,11 +537,13 @@ Route::middleware('auth', 'valid.user')->group(function () {
         )->name('google_analytics.update')->withoutMiddleware('xss');
 
         Route::post('/setting-credential', [
-            SettingController::class, 'settingTermsConditions',
+            SettingController::class,
+            'settingTermsConditions',
         ])->name('setting.TermsConditions.update')->withoutMiddleware([XSS::class]);
         Route::post('update-mobile-validation', [SettingController::class, 'updateMobileValidation'])->name('update.mobile.validation');
         Route::post('/setting-payment-guide', [
-            SettingController::class, 'updateManualPaymentGuide',
+            SettingController::class,
+            'updateManualPaymentGuide',
         ])->name('setting.ManualPaymentGuides.update')->withoutMiddleware([XSS::class]);
 
         Route::get('/coupon-codes', [CouponCodeController::class, 'index'])->name('coupon-codes.index');
@@ -602,21 +607,23 @@ Route::prefix('admin')->middleware('subscription', 'auth', 'valid.user', 'role:a
         [AffiliationWithdrawController::class, 'sendInvite']
     )->name('send-invite');
 
-    Route::get('/my-nfc-cards',[NfcOrdersController::class,'index'])->name('user.orders');
+    Route::get('/my-nfc-cards', [NfcOrdersController::class, 'index'])->name('user.orders');
     Route::get('/my-nfc-cards/details', [NfcOrdersController::class, 'nfcCardDetails'])->name('nfc-details');
-    Route::get('/my-nfc-cards/create',[NfcOrdersController::class,'create'])->name('order.nfc');
+    Route::get('/my-nfc-cards/create', [NfcOrdersController::class, 'create'])->name('order.nfc');
     Route::get('/vcard-data', [NfcOrdersController::class, 'getVcardData'])->name('vcard-data');
-    Route::post('/order',[NfcOrdersController::class,'store'])->name('nfc.order.store');
-    Route::get('/nfc/stripe',[StripeController::class,'nfcPurchase'])->name('stripe.nfc');
+    Route::post('/order', [NfcOrdersController::class, 'store'])->name('nfc.order.store');
+    Route::get('/nfc/stripe', [StripeController::class, 'nfcPurchase'])->name('stripe.nfc');
     Route::resource('/my-nfc-orders', NfcOrdersController::class)->only('index', 'show');
 
-    Route::get('/storage',[StorageLimitController::class,'index'])->name('user.storage');
-    Route::post('/storage-chart',[StorageLimitController::class,'storageChart'])->name('user.storage.chart');
+    Route::get('/storage', [StorageLimitController::class, 'index'])->name('user.storage');
+    Route::post('/storage-chart', [StorageLimitController::class, 'storageChart'])->name('user.storage.chart');
 });
 
 Route::get('/v')->name('vcard.defaultIndex');
 Route::get('/v/{alias}', [VcardController::class, 'show'])->name('old.vcard.show')->middleware([
-    'analytics', 'language', 'vcardSubscription',
+    'analytics',
+    'language',
+    'vcardSubscription',
 ]);
 Route::get(
     '/v/{alias}/blog/{id}',
@@ -627,7 +634,8 @@ Route::get(
     [VcardController::class, 'showProducts']
 )->name('showProducts')->middleware('language');
 Route::get('/v/{alias}/privacy-policy/{id}', [
-    VcardController::class, 'showPrivacyPolicy',
+    VcardController::class,
+    'showPrivacyPolicy',
 ])->name('old.vcard.show-privacy-policy')->middleware(['vcardSubscription']);
 Route::get('/vcard/{alias}/chart', [VcardController::class, 'chartData'])->name('vcard.chart');
 Route::post('/vcard/{vcard}/check-password', [VcardController::class, 'checkPassword'])->name('vcard.password');
@@ -822,17 +830,17 @@ Route::post('product-razorpay-payment-success', [RazorpayController::class, 'pro
 Route::post('product-razorpay-payment-failed', [RazorpayController::class, 'productPaymentFailed'])
     ->name('product.razorpay.failed');
 
-require __DIR__.'/auth.php';
-require __DIR__.'/user.php';
-require __DIR__.'/upgrade.php';
-require __DIR__.'/custom_routes.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/user.php';
+require __DIR__ . '/upgrade.php';
+require __DIR__ . '/custom_routes.php';
 Route::post('buy-product', [ProductController::class, 'buy'])->name('buy.product');
 // phonepe
-Route::get('phonepe-subscription',[PhonepeController::class,'phonePe'])->name('phonepe-subscription');
-Route::post('phonepe-subscription-response',[PhonepeController::class,'callbackPhonePe'])->name('phonepe-subscription-response');
-Route::post('phonepe-nfcorder-response',[PhonepeController::class,'nfcOrderSuccess'])->name('phonepe-nfcorder-response');
-Route::post('phonepe-appointmentbook-response',[UserPhonepeController::class,'appointmentBookSuccess'])->name('phonepe-appointmentbook-response');
-Route::post('phonepe-Product-response',[UserPhonepeController::class,'productBuySuccess'])->name('phonepe-Product-response');
+Route::get('phonepe-subscription', [PhonepeController::class, 'phonePe'])->name('phonepe-subscription');
+Route::post('phonepe-subscription-response', [PhonepeController::class, 'callbackPhonePe'])->name('phonepe-subscription-response');
+Route::post('phonepe-nfcorder-response', [PhonepeController::class, 'nfcOrderSuccess'])->name('phonepe-nfcorder-response');
+Route::post('phonepe-appointmentbook-response', [UserPhonepeController::class, 'appointmentBookSuccess'])->name('phonepe-appointmentbook-response');
+Route::post('phonepe-Product-response', [UserPhonepeController::class, 'productBuySuccess'])->name('phonepe-Product-response');
 
 Route::get('/getCookie', [VcardController::class, 'getCookie'])->name('getCookie');
 
@@ -846,12 +854,13 @@ Route::get(
     [VcardController::class, 'showBlog']
 )->name('vcard.show-blog')->middleware(['vcardSubscription']);
 Route::get('{alias}/privacy-policy/{id}', [
-    VcardController::class, 'showPrivacyPolicy',
+    VcardController::class,
+    'showPrivacyPolicy',
 ])->name('vcard.show-privacy-policy')->middleware(['vcardSubscription']);
 
 Route::get('{alias}/resume', [VcardController::class, 'show'])->name('vcard.show.resume');
 Route::get('{alias}/contact', [VcardController::class, 'show'])->name('vcard.show.contact')->middleware('language');
-Route::post('{alias}/contact/appointment/store',[ScheduleAppointmentController::class, 'store'])->name('appointment.store.vcard11');
+Route::post('{alias}/contact/appointment/store', [ScheduleAppointmentController::class, 'store'])->name('appointment.store.vcard11');
 Route::post('buy-product', [ProductController::class, 'buy'])->name('buy.product');
 Route::get('{alias}/blog', [VcardController::class, 'show'])->name('vcard.show.blog')->middleware('language');
 Route::get('{alias}/portfolio-single', [VcardController::class, 'show'])->name('vcard.show.portfolio-single');

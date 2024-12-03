@@ -264,43 +264,134 @@
 
         <!-- Plans End Here -->
 
-        <section class="about-section py-5 bg-light" id="aboutUsTab">
+        <section class="about-section py-5">
             <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-lg-8">
-                        <div class="section-heading text-center mb-5">
-                            <h2 class="font-weight-700 text-primary">{{ __('messages.about_us.about_us') }}</h2>
-                            <p class="lead text-muted">Empowering individuals and businesses with innovative digital identity solutions.</p>
+                <!-- Header -->
+                <div class="row justify-content-center mb-5">
+                    <div class="col-lg-8 text-center">
+                        <h2 class="display-4 fw-bold text-primary mb-3">About Us</h2>
+                        <div class="divider-custom">
+                            <div class="line bg-primary"></div>
+                            <div class="icon"><i class="fas fa-star"></i></div>
+                            <div class="line bg-primary"></div>
                         </div>
+                        <p class="lead text-muted">Empowering individuals and businesses with innovative digital identity solutions.</p>
                     </div>
                 </div>
-                <div class="row g-5 align-items-center">
-                    <!-- About Content -->
-                    <div class="col-12 col-lg-6">
-                        <div class="about-info bg-white p-4 p-lg-5 rounded-4 shadow-sm">
-                            <h3 class="h3 text-primary mb-4">Our Mission</h3>
-                            <p class="text-muted mb-4">
-                                ShareTap revolutionizes professional and personal profile sharing. We provide seamless, contactless solutions with personalized NFC cards that bring profiles to life with just a tap. Our goal: make digital identity sharing efficient and innovative for everyone.
-                            </p>
-                            <h3 class="h3 text-primary mb-4">Our Vision</h3>
-                            <p class="text-muted mb-4">
-                                We aim to be the leading platform for digital identity sharing, fostering trust and effective connections in our digital world. With 30+ templates, customization options, and cutting-edge NFC technology, ShareTap is transforming self-presentation.
-                            </p>
-                            <a href="#" class="btn btn-primary btn-lg">Learn More</a>
+
+                <!-- Main Content -->
+                <div class="row g-4 align-items-stretch">
+                    <!-- Mission & Vision Cards -->
+                    <div class="col-lg-6">
+                        <div class="h-100 d-flex flex-column">
+                            <!-- Mission Card -->
+                            <div class="card border-0 shadow-sm mb-4 hover-lift">
+                                <div class="card-body p-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="icon-circle bg-primary bg-opacity-10 text-primary me-3">
+                                            <i class="fas fa-rocket"></i>
+                                        </div>
+                                        <h3 class="h4 mb-0 text-primary">Our Mission</h3>
+                                    </div>
+                                    <p class="card-text text-muted">
+                                        ShareTap revolutionizes professional and personal profile sharing. We provide seamless,
+                                        contactless solutions with personalized NFC cards that bring profiles to life with just a tap.
+                                        Our goal: make digital identity sharing efficient and innovative for everyone.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Vision Card -->
+                            <div class="card border-0 shadow-sm hover-lift">
+                                <div class="card-body p-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="icon-circle bg-primary bg-opacity-10 text-primary me-3">
+                                            <i class="fas fa-eye"></i>
+                                        </div>
+                                        <h3 class="h4 mb-0 text-primary">Our Vision</h3>
+                                    </div>
+                                    <p class="card-text text-muted">
+                                        We aim to be the leading platform for digital identity sharing, fostering trust
+                                        and effective connections in our digital world. With 30+ templates, customization options,
+                                        and cutting-edge NFC technology, ShareTap is transforming self-presentation.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <!-- About Image -->
-                    <div class="col-12 col-lg-6">
-                        <div class="about-image position-relative overflow-hidden rounded-4 shadow-sm">
-                            <img src="https://infyvcards-demo.nyc3.digitaloceanspaces.com/aboutUs/5228/Rectangle-644-(4).png" alt="About ShareTap" class="img-fluid w-100">
-                            <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-primary bg-opacity-75">
-                                <h3 class="text-white fs-2">Innovating Digital Identity</h3>
+
+                    <!-- Image Section -->
+                    <div class="col-lg-6">
+                        <div class="position-relative rounded-4 overflow-hidden shadow-sm h-100">
+                            <img src="https://infyvcards-demo.nyc3.digitaloceanspaces.com/aboutUs/5228/Rectangle-644-(4).png"
+                                 alt="About ShareTap"
+                                 class="w-100 h-100 object-fit-cover">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center overlay-gradient">
+                                <h3 class="text-white display-6 text-center px-4">Innovating Digital Identity</h3>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- CTA Button -->
+                <div class="text-center mt-5">
+                    <a href="#" class="btn btn-primary btn-lg rounded-pill px-5 hover-lift">
+                        Learn More <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
             </div>
         </section>
+
+        <!-- Add this CSS to your stylesheet -->
+        <style>
+        .hover-lift {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .icon-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-circle i {
+            font-size: 1.5rem;
+        }
+
+        .divider-custom {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .divider-custom .line {
+            height: 3px;
+            width: 60px;
+            border-radius: 3px;
+        }
+
+        .divider-custom .icon {
+            color: var(--bs-primary);
+        }
+
+        .overlay-gradient {
+            background: linear-gradient(rgba(var(--bs-primary-rgb), 0.1), rgba(var(--bs-primary-rgb), 0.9));
+        }
+
+        .object-fit-cover {
+            object-fit: cover;
+        }
+        </style>
 
 
         <!-- start contact section -->

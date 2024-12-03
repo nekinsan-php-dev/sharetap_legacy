@@ -11,6 +11,8 @@ use App\Models\NfcOrderTransaction;
 use App\Repositories\NfcRepository;
 use App\Http\Requests\CreateNfcRequest;
 use App\Http\Requests\UpdateNfcCardRequest;
+use App\Models\FrontFAQs;
+use Illuminate\Support\Facades\DB;
 
 class NfcController extends AppBaseController
 {
@@ -64,5 +66,11 @@ class NfcController extends AppBaseController
         $nfc->delete();
 
         return $this->sendSuccess(__('messages.nfc.nfc_card_deleted_success'));
+    }
+
+    public function nfcCards(){
+        $nfc = DB::table('nfc_cards')->get();
+        $faqs =  FrontFAQs::first();
+        return view('nfc-cards.index',compact('nfc','faqs'));
     }
 }
