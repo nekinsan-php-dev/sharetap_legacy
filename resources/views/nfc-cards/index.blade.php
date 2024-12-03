@@ -40,7 +40,7 @@
         @foreach ($nfc as $item)
         <div class="col">
             <div class="card h-100 border-0 card-hover">
-                <div class="card-body p-4">
+                <div class="card-body p-4"  data-bs-toggle="modal" data-bs-target="#cardModal{{ $item->id }}">
                     <div class="position-relative p-4">
                         <img src="{{ asset($item->front_path) }}" class="card-img-top rounded-top" alt="Front of {{ $item->name }}" loading="lazy">
                         <div class="position-absolute top-0 end-0 m-3">
@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-transparent border-top-0 p-4">
-                    <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#cardModal{{ $item->id }}">
+                    <button class="btn btn-primary w-100">
                         View Details
                     </button>
                 </div>
