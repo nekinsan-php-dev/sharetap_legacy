@@ -11,9 +11,9 @@
             @foreach ($nfc as $item)
                 <div class="col-sm-6 col-md-6 col-lg-6">
                     <div style="padding-bottom: 15px;">
-                        <div>
+                        {{-- <div>
                             <h5 class="card-title fw-bold mb-0 text-dark text-capitalize">{{ $item->name }}</h5>
-                        </div>
+                        </div> --}}
                         <div class="d-flex justify-content-center">
                             <div class="p-1">
                                 <img src="{{ asset($item->front_path) }}" class="img-fluid rounded shadow lazyload"
