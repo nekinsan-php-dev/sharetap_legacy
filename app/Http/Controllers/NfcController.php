@@ -69,7 +69,7 @@ class NfcController extends AppBaseController
     }
 
     public function nfcCards(){
-        $nfc = DB::table('nfc_cards')->get();
+        $nfc = DB::table('nfc_cards')->where('is_active',1)->get();
         $faqs =  FrontFAQs::first();
         return view('nfc-cards.index',compact('nfc','faqs'));
     }
