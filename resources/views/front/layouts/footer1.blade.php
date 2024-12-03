@@ -3,8 +3,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-4 mb-lg-0">
-                    <img src="{{ getLogoUrl() }}" alt="{{ getAppName() }}" class="img-fluid mb-3" style="max-height: 50px;">
-                    
+                    <img src="{{ asset('images/sharetap-logo-white-01.png') }}" alt="{{ getAppName() }}" class="img-fluid mb-3" style="max-height: 50px;">
+
                     <p class="text-muted">Empowering your digital presence with innovative solutions.</p>
                     @if (isset($setting['mobile_app_enable']) && $setting['mobile_app_enable'] == 1)
                         <h6 class="text-white mt-4 mb-3">{{ __('messages.get_the_free_app') }}</h6>
