@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-transparent border-top-0 p-4">
-                    <button class="btn btn-primary w-100">
+                    <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#cardModal{{ $item->id }}">
                         View Details
                     </button>
                 </div>
