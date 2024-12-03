@@ -40,8 +40,8 @@
         @foreach ($nfc as $item)
         <div class="col">
             <div class="card h-100 border-0 card-hover">
-                <div class="card-body p-0">
-                    <div class="position-relative">
+                <div class="card-body p-4">
+                    <div class="position-relative p-4">
                         <img src="{{ asset($item->front_path) }}" class="card-img-top rounded-top" alt="Front of {{ $item->name }}" loading="lazy">
                         <div class="position-absolute top-0 end-0 m-3">
                             <span class="badge bg-primary rounded-pill px-3 py-2">NFC Enabled</span>
