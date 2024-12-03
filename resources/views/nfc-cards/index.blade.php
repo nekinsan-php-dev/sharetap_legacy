@@ -103,7 +103,7 @@
                     </div>
                     <div class="modal-footer border-0 justify-content-center">
                         <button type="button" class="btn btn-outline-secondary px-4 py-2" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary px-4 py-2">Order Now</button>
+                        <a href="{{ url('/card/create') }}" class="btn btn-primary px-4 py-2">Order Now</a>
                     </div>
                 </div>
             </div>
