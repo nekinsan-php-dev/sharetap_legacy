@@ -140,7 +140,7 @@
                         <div class="custon-class-ho">
                             <div class="feature-card" style="background: #fff; border:0px;">
                                 <div class="card-img overflow-hidden">
-                                    <img src="{{ $feature->profile_image }}" class="w-100 h-100 object-fit-cover"
+                                    <img src="{{ asset($feature->icon) }}" class="w-100 h-100 object-fit-cover"
                                         alt="feature-img">
                                 </div>
                                 <div class="card-body p-0">
@@ -269,12 +269,8 @@
                 <!-- Header -->
                 <div class="row justify-content-center mb-5">
                     <div class="col-lg-8 text-center">
-                        <h2 class="display-4 fw-bold text-primary mb-3">About Us</h2>
-                        <div class="divider-custom">
-                            <div class="line bg-primary"></div>
-                            <div class="icon"><i class="fas fa-star"></i></div>
-                            <div class="line bg-primary"></div>
-                        </div>
+                        <h2 class="font-weight-bold text-primary">About us</h2>
+
                         <p class="lead text-muted">Empowering individuals and businesses with innovative digital identity solutions.</p>
                     </div>
                 </div>
@@ -289,7 +285,7 @@
                                 <div class="card-body p-4">
                                     <div class="d-flex align-items-center mb-3">
                                         <div class="icon-circle bg-primary bg-opacity-10 text-primary me-3">
-                                            <i class="fas fa-rocket"></i>
+                                            <img style="width: 50px; height:50px; " src="{{ asset('assets/img/mission-icon.png') }}" alt="">
                                         </div>
                                         <h3 class="h4 mb-0 text-primary">Our Mission</h3>
                                     </div>
@@ -306,7 +302,7 @@
                                 <div class="card-body p-4">
                                     <div class="d-flex align-items-center mb-3">
                                         <div class="icon-circle bg-primary bg-opacity-10 text-primary me-3">
-                                            <i class="fas fa-eye"></i>
+                                            <img style="width: 50px; height:50px; " src="{{ asset('assets/img/vision-icon.png') }}" alt="">
                                         </div>
                                         <h3 class="h4 mb-0 text-primary">Our Vision</h3>
                                     </div>
@@ -333,12 +329,6 @@
                     </div>
                 </div>
 
-                <!-- CTA Button -->
-                <div class="text-center mt-5">
-                    <a href="#" class="btn btn-primary btn-lg rounded-pill px-5 hover-lift">
-                        Learn More <i class="fas fa-arrow-right ms-2"></i>
-                    </a>
-                </div>
             </div>
         </section>
 
@@ -395,78 +385,94 @@
 
 
         <!-- start contact section -->
-        <section class="contact-section py-5 bg-white" id="frontContactUsTab">
+        <section class="contact-section py-5 bg-light" id="frontContactUsTab">
             <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-lg-8">
-                        <div class="section-heading text-center mb-5">
-                            <h4 class="font-weight-700 text-primary">{{ __('messages.vcard_11.get_in_touch') }}</h4>
-                            <p class="lead text-muted">We're here to help. Send us a message and we'll respond promptly.</p>
-                        </div>
+                <div class="row justify-content-center text-center mb-5">
+                    <div class="col-lg-8">
+                        <h4 class="fw-bold text-primary mb-3">{{ __('messages.vcard_11.get_in_touch') }}</h4>
+                        <p class="text-muted fs-5">
+                            We're here to help. Send us a message, and our team will respond promptly.
+                        </p>
                     </div>
                 </div>
-                <div class="row g-4 align-items-stretch">
-                    <div class="col-12 col-lg-5">
-                        <div class="contact-info bg-light p-4 p-lg-5 rounded-4 shadow-sm h-100">
-                            <h3 class="h3 text-primary mb-4">Contact Information</h3>
+                <div class="row g-5 align-items-stretch">
+                    <!-- Contact Information -->
+                    <div class="col-lg-5">
+                        <div class="contact-info bg-white p-5 rounded-4 shadow-sm h-100">
+                            <h3 class="text-primary mb-4">Contact Information</h3>
                             <div class="d-flex align-items-center mb-4">
-                                <div class="contact-icon fs-4 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle me-3" style="width: 50px; height: 50px;">
-                                    <i class="fa-solid fa-location-dot"></i>
+                                <div class="contact-icon bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="fa-solid fa-location-dot fs-5"></i>
                                 </div>
-                                <p class="fs-5 mb-0">{{ $setting['address'] }}</p>
+                                <p class="mb-0 fs-5">{{ $setting['address'] }}</p>
                             </div>
                             <div class="d-flex align-items-center mb-4">
-                                <div class="contact-icon fs-4 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle me-3" style="width: 50px; height: 50px;">
-                                    <i class="fa-solid fa-at"></i>
+                                <div class="contact-icon bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="fa-solid fa-envelope fs-5"></i>
                                 </div>
                                 <a href="mailto:{{ $setting['email'] }}" class="fs-5 text-decoration-none text-dark">{{ $setting['email'] }}</a>
                             </div>
                             <div class="d-flex align-items-center mb-4">
-                                <div class="contact-icon fs-4 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle me-3" style="width: 50px; height: 50px;">
-                                    <i class="fa-solid fa-phone"></i>
+                                <div class="contact-icon bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="fa-solid fa-phone fs-5"></i>
                                 </div>
                                 <a href="tel:{{ $setting['phone'] }}" class="fs-5 text-decoration-none text-dark">{{ '+' . $setting['prefix_code'] . ' ' . $setting['phone'] }}</a>
                             </div>
-                            <div class="mt-5">
-                                <h4 class="h5 mb-3">Follow Us</h4>
-                                <div class="d-flex gap-3">
-                                    <a href="#" class="btn btn-outline-primary "><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#" class="btn btn-outline-primary "><i class="fab fa-twitter"></i></a>
-                                    <a href="#" class="btn btn-outline-primary "><i class="fab fa-linkedin-in"></i></a>
-                                    <a href="#" class="btn btn-outline-primary "><i class="fab fa-instagram"></i></a>
-                                </div>
+                            <h4 class="mt-5 text-secondary">Follow Us</h4>
+                            <div class="d-flex gap-3 mt-3">
+                                <a href="#"
+                                   class="d-flex justify-content-center align-items-center"
+                                   style="width: 50px; height: 50px; border-radius: 50%; background: #262262; color: #fff; text-decoration: none;">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#"
+                                   class="d-flex justify-content-center align-items-center"
+                                   style="width: 50px; height: 50px; border-radius: 50%; background: #262262; color: #fff; text-decoration: none;">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#"
+                                   class="d-flex justify-content-center align-items-center"
+                                   style="width: 50px; height: 50px; border-radius: 50%; background: #262262; color: #fff; text-decoration: none;">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#"
+                                   class="d-flex justify-content-center align-items-center"
+                                   style="width: 50px; height: 50px; border-radius: 50%; background: #262262; color: #fff; text-decoration: none;">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
                             </div>
+
                         </div>
                     </div>
-                    <div class="col-12 col-lg-7">
-                        <form class="contact-form bg-light p-4 p-lg-5 rounded-4 shadow-sm h-100" id="myForm">
+                    <!-- Contact Form -->
+                    <div class="col-lg-7">
+                        <form class="contact-form bg-white p-5 rounded-4 shadow-sm h-100" id="myForm">
                             @csrf
                             <div id="contactError" class="alert alert-danger d-none"></div>
-
-                            <h3 class="h3 text-primary mb-4">Send Us a Message</h3>
-                            <div class="row g-3">
+                            <h3 class="text-primary mb-4">Send Us a Message</h3>
+                            <div class="row g-4">
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input name="name" id="name" type="text" class="form-control" placeholder="{{ __('messages.front.enter_your_name') }}" required>
-                                        <label for="name">{{ __('messages.front.enter_your_name') }}</label>
+                                        <input name="name" id="name" type="text" class="form-control" placeholder="Your Name" required>
+                                        <label for="name" class="fs-6 text-muted">Your Name</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input name="email" id="email" type="email" class="form-control" placeholder="{{ __('messages.front.enter_your_email') }}" required>
-                                        <label for="email">{{ __('messages.front.enter_your_email') }}</label>
+                                        <input name="email" id="email" type="email" class="form-control" placeholder="Your Email" required>
+                                        <label for="email" class="fs-6 text-muted">Your Email</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <input name="subject" id="subject" type="text" class="form-control" placeholder="{{ __('messages.common.subject') }}" required>
-                                        <label for="subject">{{ __('messages.common.subject') }}</label>
+                                        <input name="subject" id="subject" type="text" class="form-control" placeholder="Subject" required>
+                                        <label for="subject" class="fs-6 text-muted">Subject</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <textarea name="message" id="message" class="form-control" style="height: 150px" placeholder="{{ __('messages.front.enter_your_message') }}" required></textarea>
-                                        <label for="message">{{ __('messages.front.enter_your_message') }}</label>
+                                        <textarea name="message" id="message" class="form-control" style="height: 150px" placeholder="Your Message" required></textarea>
+                                        <label for="message" class="fs-6 text-muted">Your Message</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -480,6 +486,7 @@
                 </div>
             </div>
         </section>
+
         <!-- end contact section -->
 
     </section>
