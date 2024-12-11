@@ -33,7 +33,6 @@
         "laravel/tinker": "^2.8",
         "laravelcollective/html": "^6.4",
         "league/flysystem-aws-s3-v3": "^3.0",
-        "livewire/livewire": "^2.11",
         "mariuzzo/laravel-js-localization": "^1.10",
         "mews/purifier": "^3.4",
         "opcodesio/log-viewer": "^2.1",

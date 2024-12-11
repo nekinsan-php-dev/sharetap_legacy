@@ -181,7 +181,7 @@
             </form>
         </div>
     </div>
-    
+
   <script>
 document.addEventListener('DOMContentLoaded', function() {
     const divs = document.querySelectorAll('.clickable-div');

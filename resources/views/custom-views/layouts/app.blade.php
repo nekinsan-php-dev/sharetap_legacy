@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('title') | {{ getAppName() }}</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" href="{{ getFaviconUrl() }}" type="image/png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
-    
+
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ asset('assets/css/custom-third-party.css') }}">
-    
+
     @if (!getLogInUser()->theme_mode)
         <link rel="stylesheet" href="{{ asset('assets/css/custom-stylesheet.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins.css') }}">
@@ -24,14 +24,14 @@
         <link rel="stylesheet" href="{{ asset('assets/css/style.dark.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/custom-pages-dark.css') }}">
     @endif
-    
+
     <link rel="stylesheet" href="{{ asset('assets/css/page.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}">
 
-  
 
-   
-    
+
+
+
     <script src="{{ asset('assets/js/third-party.js') }}"></script>
 
     <script data-turbo-eval="false">
@@ -74,65 +74,85 @@
     <script src="{{ asset('messages.js') }}"></script>
     <script src="{{ asset('assets/js/pages.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css" />
+
     <script>
         let authUser = "{{ Auth::user() }}";
         let roleAdmin = "{{ Auth::user()->hasRole('admin') }}";
     </script>
 
+    <style>
+        .permission-card {
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .permission-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .permission-card.permission-selected {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .permission-card.permission-selected i {
+            color: white;
+        }
+
+        .permission-card i {
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+    </style>
+
+
 </head>
 
 <body>
-<div class="d-flex flex-column flex-root vh-100">
-    <div class="d-flex flex-row flex-column-fluid">
-        @include('custom-views.layouts.sidebar')
-        <div class="wrapper d-flex flex-column flex-row-fluid">
-            <div class='container-fluid d-flex align-items-stretch justify-content-between px-0'>
-                @include('custom-views.layouts.header')
-            </div>
-            <div class='content d-flex flex-column flex-column-fluid pt-7 overflow-scroll'>
-                @yield('header_toolbar')
-                <div class="container-fluid">
-                    @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <div class="alert-body d-flex">
-                                <span>{{ session('success') }}</span>
-                                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="d-flex flex-column flex-root vh-100">
+        <div class="d-flex flex-row flex-column-fluid">
+            @include('custom-views.layouts.sidebar')
+            <div class="wrapper d-flex flex-column flex-row-fluid">
+                <div class='container-fluid d-flex align-items-stretch justify-content-between px-0'>
+                    @include('custom-views.layouts.header')
+                </div>
+                <div class='content d-flex flex-column flex-column-fluid pt-7 overflow-scroll'>
+                    @yield('header_toolbar')
+                    <div class="container-fluid">
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <div class="alert-body d-flex">
+                                    <span>{{ session('success') }}</span>
+                                    <button class="btn-close" type="button" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
                             </div>
-                        </div>
-                    @endif
-                    @if($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <div class="alert-body d-flex">
-                                @foreach($errors->all() as $error)
-                                    <span>{{ $error }}</span>
-                                @endforeach
-                                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                        @endif
+                        @if ($errors->any())
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <div class="alert-body d-flex">
+                                    @foreach ($errors->all() as $error)
+                                        <span>{{ $error }}</span>
+                                    @endforeach
+                                    <button class="btn-close" type="button" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
                             </div>
-                        </div>
-                    @endif
-                    <div class="d-flex justify-content-end pb-2 profile_link">
-                        @php
-                            $url_alias = auth()->user()->vcard->url_alias;
-                            $portfolio_url = url($url_alias);
-                        @endphp
-                        <a href="{{ $portfolio_url }}" target="_blank">
-                            Portfolio Preview
-                        </a>
+                        @endif
+                    </div>
+                    <div>
+                        @yield('content')
                     </div>
                 </div>
-                <div>
-                    @yield('content')
+                <div class='container-fluid'>
+                    @include('layouts.footer')
                 </div>
-            </div>
-            <div class='container-fluid'>
-                @include('layouts.footer')
             </div>
         </div>
     </div>
-</div>
-@include('custom-views.layouts.changepassword')
+    @include('custom-views.layouts.changepassword')
 
 </body>
 

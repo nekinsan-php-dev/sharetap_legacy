@@ -326,7 +326,7 @@ class CardController extends Controller
     public function tempStoreStepThree()
     {
         $user = session()->get('user_details');
-        
+
         return view('custom-views.card.create-step-3',compact('user'));
     }
 
@@ -698,7 +698,7 @@ class CardController extends Controller
 {
     $userData = session()->get('logged_user_data');
     $user = User::find($userData->id);
-    
+
     if (!$user) {
         // Handle case where user is not found
         return redirect()->back()->with('error', 'User not found');
@@ -832,7 +832,7 @@ class CardController extends Controller
             SharetapPermission::create($data);
         }
 
-        return redirect()->back()->with('success', 'Permissions updated successfully');
+        return redirect()->route('user.dashboard.index')->with('success', 'Permissions updated successfully kjhsagdi sajfhh');
     }
 
 

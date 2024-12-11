@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laracasts\Flash\Flash;
+use App\Models\SharetapPermission;
 
 class UserDashboardController extends Controller
 {
@@ -58,9 +59,16 @@ class UserDashboardController extends Controller
     }
 
     public function dashboard(){
-        $user = User::find(auth()->id());
+        $userData = session()->get('logged_user_data');
+        $sharetapId = $userData->vcard->id ?? 1;
+        $shareTapPermissions = SharetapPermission::where('vcard_id', $sharetapId)->first();
 
-        return view('custom-views.user-dashboard.index',compact('user'));
+        return view('custom-views.user-dashboard.index',compact('userData', 'shareTapPermissions'));
+    }
+
+    public function basicInfo(){
+        $user = User::find(auth()->id());
+        return view('custom-views.user-dashboard.basic-info',compact('user'));
     }
 
     public function editProfile()

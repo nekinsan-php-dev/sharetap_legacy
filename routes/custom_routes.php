@@ -31,6 +31,7 @@ Route::post('payment/confirmation', [CardController::class, 'paymentConfirmation
 Route::middleware(['auth'])->group(function () {
     Route::prefix('user')->group(function () {
         Route::get('dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard.index');
+        Route::get('basic-info', [UserDashboardController::class, 'basicInfo'])->name('user.basic.info');
         Route::get('profile/edit', [UserDashboardController::class, 'editProfile'])->name('user.profile.edit');
         Route::put('profile/edit', [UserDashboardController::class, 'updateProfile']);
         Route::get('profile/templates', [UserDashboardController::class, 'templates'])->name('user.profile.templates');
