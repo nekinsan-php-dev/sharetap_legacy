@@ -5,16 +5,24 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="p-2">
-            <div class="p-2" style="font-size: 1.5rem;">
-                Sharetap Permission
-            </div>
-            <div class="p-2">Select what you want to activate</div>
-        </div>
+<div class="container mx-auto px-4">
+    <div class="my-6">
+        <h2 class="text-2xl font-bold">ShareTap Permissions</h2>
+        <p class="text-gray-600">Select what you want to activate</p>
+    </div>
 
         <div class="card shadow">
             <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center">
+                            <span class=" bg-success me-2 p-2 rounded-circle"></span>
+                            <span class="me-4">Active </span>
+                            <span class=" bg-white me-2 p-2 rounded-circle" style="border: 1px solid #ccc;"></span>
+                            <span>Inactive </span>
+                        </div>
+                    </div>
+                </div>
                 <form action="{{ route('user.sharetap.permissions.update') }}" method="POST">
                     @csrf
 
@@ -41,7 +49,7 @@
 
                         @foreach ($items as $item)
                             <div class="col col-4">
-                                <div class="card h-100 shadow-sm permission-card" data-id="{{ $item['id'] }}"
+                                <div class="card h-100 border-1 shadow-sm permission-card" data-id="{{ $item['id'] }}"
                                     @if (isset($shareTapPermissions) && $shareTapPermissions->{$item['id']} == 1) class="permission-selected" @endif>
                                     <div class="card-body d-flex flex-column justify-content-center align-items-center">
                                         <i class="{{ $item['icon'] }} fa-2x mb-3"></i>
@@ -65,6 +73,9 @@
             </div>
         </div>
     </div>
+
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
