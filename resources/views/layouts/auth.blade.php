@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins.css') }}">
     @stack('css')
     @yield('css')
-    {!! ReCaptcha::htmlScriptTagJsApi() !!}
+    {{-- {!! ReCaptcha::htmlScriptTagJsApi() !!} --}}
 </head>
 
 <body>

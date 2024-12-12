@@ -832,7 +832,7 @@ class CardController extends Controller
             SharetapPermission::create($data);
         }
 
-        return redirect()->route('user.dashboard.index')->with('success', 'Permissions updated successfully kjhsagdi sajfhh');
+        return redirect()->route('user.dashboard.index')->with('success', 'Permissions updated successfully');
     }
 
 

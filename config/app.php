@@ -170,8 +170,7 @@ return [
 
     'providers' => ServiceProvider::defaultProviders()->merge([
         Spatie\Permission\PermissionServiceProvider::class,
-        LaravelQRCode\Providers\QRCodeServiceProvider::class,
-        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
+        // LaravelQRCode\Providers\QRCodeServiceProvider::class,
         Unicodeveloper\Paystack\PaystackServiceProvider::class,
         Berkayk\OneSignal\OneSignalServiceProvider::class,
         InstallerErag\InstallerServiceProvider::class,
@@ -254,9 +253,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         // 'QRCode'    => LaravelQRCode\Facades\QRCode::class,
         //'QRCode'       => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
-        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+        // 'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
         'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
-        'LaravelPwa' => \Ladumor\LaravelPwa\LaravelPwa::class,
         'OneSignal'    => Berkayk\OneSignal\OneSignalFacade::class,
         'Rave' => KingFlamez\Rave\Facades\Rave::class,
     ],
