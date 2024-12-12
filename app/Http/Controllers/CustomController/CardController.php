@@ -817,7 +817,7 @@ class CardController extends Controller
             'linkedin' => $request->linkedin ?? 0,
             'whatsapp' => $request->whatsapp ?? 0,
             'youtube' => $request->youtube ?? 0,
-            'basic_info' => $request->basic_information ?? 0,
+            'basic_info' => $request->basic_info ?? 0,
             'services' => $request->services ?? 0,
             'testimonials' => $request->testimonials ?? 0,
             'business_hours' => $request->business_hours ?? 0,

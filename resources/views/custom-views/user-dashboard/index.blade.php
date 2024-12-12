@@ -30,9 +30,9 @@
                                 ['id' => 'website', 'name' => 'Website', 'icon' => 'fas fa-globe'],
                                 ['id' => 'services', 'name' => 'Services', 'icon' => 'fas fa-concierge-bell'],
                                 ['id' => 'testimonials', 'name' => 'Testimonials', 'icon' => 'fas fa-quote-right'],
-                                ['id' => 'business-hours', 'name' => 'Business Hours', 'icon' => 'far fa-clock'],
+                                ['id' => 'business_hours', 'name' => 'Business Hours', 'icon' => 'far fa-clock'],
                                 [
-                                    'id' => 'basic_information',
+                                    'id' => 'basic_info',
                                     'name' => 'Basic Information',
                                     'icon' => 'fas fa-info-circle',
                                 ],
