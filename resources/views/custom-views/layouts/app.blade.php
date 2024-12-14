@@ -1,159 +1,98 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>@yield('title') | {{ getAppName() }}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    {{ $title ?? 'Sharetap' }}
+  </title>
 
-    <!-- Favicon -->
-    <link rel="icon" href="{{ getFaviconUrl() }}" type="image/png">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
-
-    <!-- General CSS Files -->
-    <link rel="stylesheet" href="{{ asset('assets/css/custom-third-party.css') }}">
-
-    @if (!getLogInUser()->theme_mode)
-        <link rel="stylesheet" href="{{ asset('assets/css/custom-stylesheet.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/plugins.css') }}">
-    @else
-        <link rel="stylesheet" href="{{ asset('css/plugins.dark.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/style.dark.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/custom-pages-dark.css') }}">
-    @endif
-
-    <link rel="stylesheet" href="{{ asset('assets/css/page.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}">
-
-
-
-
-
-    <script src="{{ asset('assets/js/third-party.js') }}"></script>
-
-    <script data-turbo-eval="false">
-        let mobileValidation = "{{ getSuperAdminSettingValue('mobile_validation') }}"
-        let stripe = ''
-        @if (getSelectedPaymentGateway('stripe_key'))
-            stripe = Stripe('{{ getSelectedPaymentGateway('stripe_key') }}')
-        @endif
-        let appUrl = "{{ config('app.url') }}"
-        let noData = "{{ __('messages.no_data') }}"
-        let utilsScript = "{{ asset('assets/js/inttel/js/utils.min.js') }}"
-        let defaultProfileUrl = "{{ asset('web/media/avatars/user.png') }}"
-        let defaultTemplate = "{{ asset('assets/images/default_cover_image.jpg') }}"
-        let defaultServiceIconUrl = "{{ asset('assets/images/default_service.png') }}"
-        let defaultCoverUrl = "{{ asset('assets/images/default_cover_image.jpg') }}"
-        let defaultGalleryUrl = "{{ asset('assets/images/default_service.png') }}"
-        let defaultAppLogoUrl = "{{ asset(getAppLogo()) }}"
-        let defaultFaviconUrl = "{{ getFaviconUrl() }}"
-        let getLoggedInUserdata = "{{ getLogInUser() }}"
-        window.getLoggedInUserLang = "{{ getCurrentLanguageName() }}"
-        let lang = "{{ Illuminate\Support\Facades\Auth::user()->language ?? 'en' }}"
-        let getCurrencyCode = "{{ getMaximumCurrencyCode($getIcon = true) }}"
-        let sweetAlertIcon = "{{ asset('images/remove.png') }}"
-        let sweetCompletedAlertIcon = "{{ asset('images/Alert.png') }}"
-        let defaultCountryCodeValue = "{{ getSuperAdminSettingValue('default_country_code') }}"
-        let getUniqueVcardUrlAlias = "{{ getUniqueVcardUrlAlias() }}"
-        let currencyAfterAmount = "{{ getSuperAdminSettingValue('currency_after_amount') }}"
-        let userDateFormate = "{{ getSuperAdminSettingValue('datetime_method') ?? 1 }}";
-        let defaultVideoCoverImg = "{{ asset('assets/images/video-icon.png') }}";
-        let getLoggedInUsersteps = "{{ getLogInUser()->steps }}"
-        let hasActiveSubscription = "{{ hasActiveSubscription() }}"
-
-        $(document).ready(function() {
-            $('[data-bs-toggle="tooltip"]').tooltip()
-        })
-    </script>
-
-    @stack('scripts')
-
-    <script src="{{ asset('messages.js') }}"></script>
-    <script src="{{ asset('assets/js/pages.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css" />
-
-    <script>
-        let authUser = "{{ Auth::user() }}";
-        let roleAdmin = "{{ Auth::user()->hasRole('admin') }}";
-    </script>
-
-    <style>
-        .permission-card {
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .permission-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
-        }
-
-        .permission-card.permission-selected {
-            background-color: #27ae60;
-            color: white;
-        }
-
-        .permission-card.permission-selected i {
-            color: white;
-        }
-
-        .permission-card i {
-            color: #007bff;
-            transition: color 0.3s ease;
-        }
-    </style>
-
-
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="{{ asset('lte/plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="{{ asset('lte/plugins/toastr/toastr.min.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ asset('lte/dist/css/adminlte.min.css') }}">
 </head>
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
 
-<body>
-    <div class="d-flex flex-column flex-root vh-100">
-        <div class="d-flex flex-row flex-column-fluid">
-            @include('custom-views.layouts.sidebar')
-            <div class="wrapper d-flex flex-column flex-row-fluid">
-                <div class='container-fluid d-flex align-items-stretch justify-content-between px-0'>
-                    @include('custom-views.layouts.header')
-                </div>
-                <div class='content d-flex flex-column flex-column-fluid pt-7 overflow-scroll'>
-                    @yield('header_toolbar')
-                    <div class="container-fluid">
-                        @if (session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <div class="alert-body d-flex">
-                                    <span>{{ session('success') }}</span>
-                                    <button class="btn-close" type="button" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                                </div>
-                            </div>
-                        @endif
-                        @if ($errors->any())
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <div class="alert-body d-flex">
-                                    @foreach ($errors->all() as $error)
-                                        <span>{{ $error }}</span>
-                                    @endforeach
-                                    <button class="btn-close" type="button" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                    <div>
-                        @yield('content')
-                    </div>
-                </div>
-                <div class='container-fluid'>
-                    @include('layouts.footer')
-                </div>
-            </div>
+  <!-- Navbar -->
+  @include('custom-views.layouts.header')
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+    @include('custom-views.layouts.sidebar')
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    {{-- <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Starter Page</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Starter Page</li>
+            </ol>
+          </div>
         </div>
+      </div>
+    </div> --}}
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        @yield('content')
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
     </div>
-    @include('custom-views.layouts.changepassword')
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
 
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline">
+     Jiyo India Sales & Marketing Pvt. Ltd.
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2025 <a href="https://sharetap.ai">sharetap.ai</a>.</strong> All rights reserved.
+  </footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="{{ asset('lte/plugins/jquery/jquery.min.js') }}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{ asset('lte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<!-- Toastr -->
+<script src="{{ asset('lte/plugins/toastr/toastr.min.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ asset('lte/dist/js/adminlte.min.js') }}"></script>
+
+
+@if (session('success'))
+<script>
+    toastr.success('{{ session('success') }}');
+</script>
+@endif
+
+@if (session('error'))
+<script>
+    toastr.error('{{ session('error') }}');
+</script>
+
+@endif
 </body>
-
 </html>

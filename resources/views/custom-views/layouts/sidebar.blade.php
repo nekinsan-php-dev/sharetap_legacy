@@ -1,25 +1,82 @@
-<div class="aside-menu-container" id="sidebar">
-    <div class="aside-menu-container__aside-logo flex-column-auto">
-        <a data-turbo="false" href="{{ url('/') }}" class="text-decoration-none sidebar-logo" target="_blank">
-            <div class="image">
-                <img src="{{ getDashboardLogoUrl() }}" alt="Logo" class="object-fit-cover sidebar-app-logo"/>
-            </div>
-            <!--<span class="text-gray-900 fs-4">{{ (strlen(getAppName()) > 12 ) ? substr(getAppName(), 0,12).'...' : getAppName() }}</span>-->
-        </a>
-        <button type="button" class="btn px-0 aside-menu-container__aside-menubar d-lg-block d-none sidebar-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="28" fill="#6C757D" class="bi bi-list"
-                 viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                      d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-            </svg>
-        </button>
-    </div>
-    <div class="sidebar-scrolling">
-        <ul class="aside-menu-container__aside-menu nav flex-column">
-            @include('custom-views.layouts.menu')
-            <div class="no-record text-center d-none">{{ __('messages.no_matching_records_found')}}</div>
-        </ul>
-    </div>
-</div>
-<div class="bg-overlay" id="sidebar-overly"></div>
+<aside class="main-sidebar sidebar-light-primary elevation-4">
+    <a href="{{ url('/user/dashboard') }}" class="brand-link">
+        <img src="{{ getDashboardLogoUrl() }}" alt="sharetap logo" style="height: 25px;">
+    </a>
 
+    <div class="sidebar">
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                {{-- <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"> --}}
+            </div>
+            <div class="info">
+                <a href="#"
+                    class="d-block">{{ auth()->user()->first_name . ' ' . (auth()->user()->last_name ?? 'Full Name') }}</a>
+            </div>
+        </div>
+
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                data-accordion="false">
+                <li class="nav-item">
+                    <a href="{{ route('user.dashboard.index') }}"
+                        class="nav-link {{ request()->is('user/dashboard') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('user.basic.info') }}"
+                        class="nav-link {{ request()->is('user/basic-info') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>Basic Information</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('user.profile.templates') }}"
+                        class="nav-link {{ request()->is('user/profile/templates') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-palette"></i>
+                        <p>Templates</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('user.services') }}"
+                        class="nav-link {{ request()->is('user/services*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>Services</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('user.testimonials') }}"
+                        class="nav-link {{ request()->is('user/testimonials*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-comments"></i>
+                        <p>Testimonials</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('user.business-hours') }}"
+                        class="nav-link {{ request()->is('user/business-hours*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-business-time"></i>
+                        <p>Business Hours</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('user.social-links') }}"
+                        class="nav-link {{ request()->is('user/social-links*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-share-alt"></i>
+                        <p>Social Media</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    @php
+                        $url_alias = auth()->user()->vcard->url_alias;
+                        $portfolio_url = url($url_alias);
+                    @endphp
+                    <a href="{{ $portfolio_url }}" target="_blank" class="nav-link">
+                        <i class="nav-icon fas fa-eye"></i>
+                        <p>Preview</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>

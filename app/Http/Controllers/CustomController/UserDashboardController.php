@@ -22,9 +22,10 @@ use App\Models\SharetapPermission;
 
 class UserDashboardController extends Controller
 {
-    public function login(){
+    public function login()
+    {
         $registerImage = Setting::where('key', 'register_image')->value('value');
-        return view('custom-views.user-dashboard.login',compact('registerImage'));
+        return view('custom-views.user-dashboard.login', compact('registerImage'));
     }
 
     public function loginPost(Request $request): RedirectResponse
@@ -58,23 +59,25 @@ class UserDashboardController extends Controller
         }
     }
 
-    public function dashboard(){
+    public function dashboard()
+    {
         $userData = session()->get('logged_user_data');
         $sharetapId = $userData->vcard->id ?? 1;
         $shareTapPermissions = SharetapPermission::where('vcard_id', $sharetapId)->first();
 
-        return view('custom-views.user-dashboard.index',compact('userData', 'shareTapPermissions'));
+        return view('custom-views.user-dashboard.index', compact('userData', 'shareTapPermissions'));
     }
 
-    public function basicInfo(){
+    public function basicInfo()
+    {
         $user = User::find(auth()->id());
-        return view('custom-views.user-dashboard.basic-info',compact('user'));
+        return view('custom-views.user-dashboard.basic-info', compact('user'));
     }
 
     public function editProfile()
     {
         $user = auth()->user();
-        return view('custom-views.user-dashboard.edit-profile',compact('user'));
+        return view('custom-views.user-dashboard.edit-profile', compact('user'));
     }
 
     public function updateProfile(Request $request)
@@ -82,18 +85,17 @@ class UserDashboardController extends Controller
         $user = auth()->user();
         $user = User::find($user->id);
         $input = $request->all();
-       if ($request->hasFile('profile_img')) {
-           $user['profile_img'] = $this->handleImageUpload($request, 'profile_img', 'images/avatar.png');
-           $input['profile_img'] = $user['profile_img'];
-
-       }
-       if($request->hasFile('cover_img')){
-           $user['cover_img'] = $this->handleImageUpload($request, 'cover_img', 'images/avatar.png');
-           $input['cover_img'] = $user['cover_img'];
-       }
+        if ($request->hasFile('profile_img')) {
+            $user['profile_img'] = $this->handleImageUpload($request, 'profile_img', 'images/avatar.png');
+            $input['profile_img'] = $user['profile_img'];
+        }
+        if ($request->hasFile('cover_img')) {
+            $user['cover_img'] = $this->handleImageUpload($request, 'cover_img', 'images/avatar.png');
+            $input['cover_img'] = $user['cover_img'];
+        }
 
         $user->update($input);
-        return redirect()->back()->with('success','Profile updated successfully');
+        return redirect()->back()->with('success', 'Profile updated successfully');
     }
 
     private function handleImageUpload(Request $request, $inputName, $defaultPath)
@@ -108,13 +110,15 @@ class UserDashboardController extends Controller
         }
     }
 
-    public function templates(){
+    public function templates()
+    {
         $user = User::find(auth()->id());
         $templates = Template::all();
-        return view('custom-views.user-dashboard.templates',compact('user','templates'));
+        return view('custom-views.user-dashboard.templates', compact('user', 'templates'));
     }
 
-    public function businessHours() {
+    public function businessHours()
+    {
         $user = User::find(auth()->id());
 
         // Get vcard_id
@@ -124,38 +128,41 @@ class UserDashboardController extends Controller
         // Fetch existing business hours
         $businessHours = BusinessHour::where('vcard_id', $vcard_id)->get()->keyBy('day_of_week');
 
+
         return view('custom-views.user-dashboard.business-hours', compact('user', 'businessHours'));
     }
 
-    public function servicesView(){
+    public function servicesView()
+    {
         $user = User::find(auth()->id());
-        $services = VcardService::where('vcard_id',$user->vcard->id)->get();
-        return view('custom-views.user-dashboard.services',compact('user','services'));
+        $services = VcardService::where('vcard_id', $user->vcard->id)->get();
+        return view('custom-views.user-dashboard.services', compact('user', 'services'));
     }
 
-    public function testimonialsView(){
+    public function testimonialsView()
+    {
         $user = User::find(auth()->id());
-        $testimonials = Testimonial::where('vcard_id',$user->vcard->id)->get();
-        return view('custom-views.user-dashboard.testimonials',compact('user','testimonials'));
+        $testimonials = Testimonial::where('vcard_id', $user->vcard->id)->get();
+        return view('custom-views.user-dashboard.testimonials', compact('user', 'testimonials'));
     }
 
-    public function socialLinks(){
+    public function socialLinks()
+    {
         $user = User::find(auth()->id());
-        $socialLinks = SocialLink::where('vcard_id',$user->vcard->id)->first();
-        return view('custom-views.user-dashboard.social-links',compact('user','socialLinks'));
+        $socialLinks = SocialLink::where('vcard_id', $user->vcard->id)->first();
+        return view('custom-views.user-dashboard.social-links', compact('user', 'socialLinks'));
     }
 
-    public function gallery(){
+    public function gallery()
+    {
         $user = User::find(auth()->id());
-        return view('custom-views.user-dashboard.gallery',compact('user'));
+        return view('custom-views.user-dashboard.gallery', compact('user'));
     }
 
     public function logout(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 
-
         return redirect('/');
     }
-
 }

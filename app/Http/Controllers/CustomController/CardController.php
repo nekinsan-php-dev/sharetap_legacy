@@ -23,17 +23,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Laracasts\Flash\Flash;
 
 class CardController extends Controller
 {
-    public function create(Request $request){
-        session()->put('selectedPlan',$request->plan ?? 1);
+    public function create(Request $request)
+    {
+        session()->put('selectedPlan', $request->plan ?? 1);
         $registerImage = Setting::where('key', 'register_image')->value('value');
-        return view('custom-views.card.create',compact('registerImage'));
+        return view('custom-views.card.create', compact('registerImage'));
     }
 
-    public function tempStore(Request $request){
+    public function tempStore(Request $request)
+    {
 
         $validated = $request->validate([
             'first_name' => 'required',
@@ -53,7 +54,7 @@ class CardController extends Controller
         ];
 
         $cardDetails = [
-            'name' => $validated['first_name'].' '.$validated['last_name'],
+            'name' => $validated['first_name'] . ' ' . $validated['last_name'],
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
             'email' => $validated['email'],
@@ -74,22 +75,23 @@ class CardController extends Controller
             'gender' => $validated['gender'],
         ];
 
-        if ($cardDetails){
+        if ($cardDetails) {
             session()->put('card_details', $cardDetails);
         }
 
-        if ($user){
+        if ($user) {
             session()->put('user_details', $user);
 
             return redirect()->route('card.temp-store-step-two')->with('success', 'User details saved successfully. Please select a template to proceed further.');
-        }else{
+        } else {
             return back()->with('error', 'Something went wrong');
         }
     }
 
-    public function updateBasicInfo(Request $request){
+    public function updateBasicInfo(Request $request)
+    {
         $cardDetails = [
-            'name' => $request->first_name.' '.$request->last_name,
+            'name' => $request->first_name . ' ' . $request->last_name,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
@@ -116,7 +118,6 @@ class CardController extends Controller
 
 
         return redirect()->back()->with('success', 'Basic info updated successfully');
-
     }
 
     public function  updateTemplate(Request $request)
@@ -134,43 +135,56 @@ class CardController extends Controller
     {
         $user = auth()->user();
 
-        // Get vcard_id
-        $card = Vcard::where('user_id', $user->id)->first();
-        $vcard_id = $card->id;
+        // Retrieve the vcard_id (Ensure the `Vcard` model and relationship exist)
+        $vcard = $user->vcard()->first();
+        // dd($vcard);
+        if (!$vcard) {
+            return redirect()->back()->with('error', 'Vcard not found.');
+        }
 
-        // Mapping days of the week to their indices
+        $vcard_id = $vcard->id;
+
+        // Days of the week mapping
         $daysOfWeek = [
-            'sunday' => 1,
-            'monday' => 2,
-            'tuesday' => 3,
-            'wednesday' => 4,
-            'thursday' => 5,
-            'friday' => 6,
-            'saturday' => 7,
+            'monday' => 1,
+            'tuesday' => 2,
+            'wednesday' => 3,
+            'thursday' => 4,
+            'friday' => 5,
+            'saturday' => 6,
+            'sunday' => 7,
         ];
 
-        // Iterating over the days of the week
+
         foreach ($daysOfWeek as $day => $index) {
-            $startKey = $day . '_start';
-            $endKey = $day . '_end';
+            $startTimeKey = $day . '_start';
+            $endTimeKey = $day . '_end';
 
-            if ($request->has($startKey) && $request->has($endKey)) {
-                $start_time = $request->input($startKey);
-                $end_time = $request->input($endKey);
+            // Check if both start and end times are provided
+            if ($request->has($startTimeKey) && $request->has($endTimeKey)) {
+                $start_time = $request->input($startTimeKey);
+                $end_time = $request->input($endTimeKey);
 
-                // Insert or update the business hours for the current day
-                BusinessHour::updateOrCreate(
-                    [
-                        'vcard_id' => $vcard_id,
-                        'day_of_week' => $index
-                    ],
-                    [
+                // Update or create the business hours record
+
+                $existDay = BusinessHour::where('vcard_id', $vcard_id)->where('day_of_week', $index)->first();
+
+                if ($existDay) {
+                    $existDay->update([
                         'start_time' => $start_time,
-                        'end_time' => $end_time
-                    ]
-                );
+                        'end_time' => $end_time,
+                    ]);
+                } else {
+                    BusinessHour::create([
+                        'vcard_id' => $vcard_id,
+                        'day_of_week' => $index,
+                        'start_time' => $start_time,
+                        'end_time' => $end_time,
+                    ]);
+                }
             }
         }
+
 
         return redirect()->back()->with('success', 'Business hours updated successfully.');
     }
@@ -226,99 +240,98 @@ class CardController extends Controller
     public function updateServices(Request $request)
     {
         $request->validate([
+            'id' => 'nullable|exists:vcard_services,id',
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'service_url' => 'nullable|string',
-            'service_icon' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'service_url' => 'nullable|url',
+            'service_icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        // Check if this is an update or create request
-        if ($request->has('id')) {
-            $vcardService = VcardService::find($request->id);
-            if (!$vcardService) {
-                return redirect()->back()->withErrors(['id' => 'Record not found.']);
-            }
-        } else {
-            $vcardService = new VcardService();
-            $vcardService->vcard_id = auth()->user()->vcard->id; // assuming vcard_id is set this way
-        }
 
-        // Handle file upload
+        $vcardService = $request->id
+            ? VcardService::findOrFail($request->id)
+            : new VcardService(['vcard_id' => auth()->user()->vcard->id]);
+
+
         if ($request->hasFile('service_icon')) {
             $file = $request->file('service_icon');
             $filename = time() . '_' . $file->getClientOriginalName();
             $path = $file->storeAs('public/service_icons', $filename);
-            $fullUrl = Storage::url($path);
-            $vcardService->service_icon = $fullUrl;
-        } elseif (!$vcardService->exists) {
-            return back()->withErrors(['service_icon' => 'Service icon is required for new entries.']);
+            $vcardService->service_icon = Storage::url($path);
+        } else if (!$vcardService->service_icon) {
+            $vcardService->service_icon = url('assets/img/service.png');
         }
 
-        // Save data to the database
-        $vcardService->name = $request->input('name');
-        $vcardService->description = $request->input('description');
-        $vcardService->service_url = $request->input('service_url');
+
+        $vcardService->fill([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'service_url' => $request->input('service_url'),
+        ]);
+
+
         $vcardService->save();
 
-        return redirect()->back()->with('success', 'Data saved successfully');
+        return redirect()->back()->with('success', 'Data saved successfully.');
     }
 
     public function updateTestimonials(Request $request)
     {
+        // Validate the request inputs
         $request->validate([
-            'vcard_id' => 'required|integer',
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'service_icon' => 'required|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ],[
-            'service_icon.required' => 'The testimonial icon is required',
-            'service_icon.file' => 'The testimonial icon must be a file',
-            'service_icon.mimes' => 'The testimonial icon must be a file of type: jpeg, png, jpg, gif, svg',
-            'service_icon.max' => 'The testimonial icon must not be greater than 2048 kilobytes',
+            'testimonial_icon' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ], [
+            'testimonial_icon.file' => 'The testimonial icon must be a valid file.',
+            'testimonial_icon.mimes' => 'The testimonial icon must be a file of type: jpeg, png, jpg, gif, svg.',
+            'testimonial_icon.max' => 'The testimonial icon must not be greater than 2048 kilobytes.',
         ]);
 
-        // Handle the file upload
-        if ($request->hasFile('service_icon')) {
-            $file = $request->file('service_icon');
-            $filePath = $file->store('uploads', 'public'); // Store the file in 'storage/app/public/uploads'
-            $fileUrl = Storage::url($filePath); // Generate the full URL
-        }
+        // Initialize file URL as null
+        $fileUrl = $request->hasFile('testimonial_icon')
+            ? Storage::url($request->file('testimonial_icon')->store('uploads', 'public'))
+            : asset('assets/img/testimonial-icon.png');
 
-        // Save the data into the database
+        // Create and save the testimonial record
         $testimonial = new Testimonial();
         $testimonial->vcard_id = auth()->user()->vcard->id;
         $testimonial->name = $request->input('name');
         $testimonial->description = $request->input('description');
-        $testimonial->testimonial_icon = $fileUrl;
+        $testimonial->testimonial_icon = $fileUrl ?? '';
         $testimonial->save();
 
-        return redirect()->back()->with('success', 'Data has been saved successfully!');
+        // Redirect with a success message
+        return redirect()->back()->with('success', 'Testimonial has been saved successfully!');
     }
 
 
 
-    public function tempStoreStepTwo(){
+
+    public function tempStoreStepTwo()
+    {
         $templates = Template::all();
-        return view('custom-views.card.create-step-2',compact('templates'));
+        return view('custom-views.card.create-step-2', compact('templates'));
     }
 
-    public function tempStoreStepTwoStore(Request $request){
-            $validated = $request->validate([
+    public function tempStoreStepTwoStore(Request $request)
+    {
+        $validated = $request->validate([
             'template_id' => 'required',
         ]);
 
-            $validated['template_id'] = $request->template_id[0];
+        $validated['template_id'] = $request->template_id[0];
 
-            $selectedTemplates = implode(",", $request->template_id);
+        $selectedTemplates = implode(",", $request->template_id);
 
         $template = Template::find($validated['template_id']);
 
-        if ($template){
+        if ($template) {
             session()->put('user_template_id', $template->id);
-            session()->put('selected_templates',$selectedTemplates);
+            session()->put('selected_templates', $selectedTemplates);
 
             return redirect()->route('card.temp-store-step-three');
-        }else{
+        } else {
             return back()->with('error', 'Something went wrong');
         }
     }
@@ -327,7 +340,7 @@ class CardController extends Controller
     {
         $user = session()->get('user_details');
 
-        return view('custom-views.card.create-step-3',compact('user'));
+        return view('custom-views.card.create-step-3', compact('user'));
     }
 
     public function tempStoreStepThreeStore(Request $request)
@@ -365,22 +378,22 @@ class CardController extends Controller
 
             $card = Vcard::create($card_details);
 
-            if($card){
-               SharetapPermission::create([
-                   'vcard_id' => $card->id,
-                   'basic_info' => 1,
-                   'website' => 1,
-                   'twitter' => 1,
-                   'facebook' => 1,
-                   'linkedin' => 1,
-                   'instagram' => 1,
-                   'whatsapp' => 1,
-                   'youtube' => 1,
-                   'services' => 0,
-                   'testimonials' => 0,
-                   'business_hours' => 0,
-               ]);
-           }
+            if ($card) {
+                SharetapPermission::create([
+                    'vcard_id' => $card->id,
+                    'basic_info' => 1,
+                    'website' => 1,
+                    'twitter' => 1,
+                    'facebook' => 1,
+                    'linkedin' => 1,
+                    'instagram' => 1,
+                    'whatsapp' => 1,
+                    'youtube' => 1,
+                    'services' => 0,
+                    'testimonials' => 0,
+                    'business_hours' => 0,
+                ]);
+            }
 
             SocialLink::create([
                 'vcard_id' => $card->id,
@@ -426,10 +439,11 @@ class CardController extends Controller
     }
 
 
-    public function tempStoreStepFinalStep(){
+    public function tempStoreStepFinalStep()
+    {
         $userData = session()->get('logged_user_data');
         $nfcTemplates = \DB::table('nfc_cards')->get();
-        return view('custom-views.card.final-step',compact('nfcTemplates','userData'));
+        return view('custom-views.card.final-step', compact('nfcTemplates', 'userData'));
     }
 
 
@@ -453,10 +467,10 @@ class CardController extends Controller
         }
 
         // Handle file upload
-        if ($request->hasFile('service_icon')) {
-            $file = $request->file('service_icon');
+        if ($request->hasFile('testimonial_icon')) {
+            $file = $request->file('testimonial_icon');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('public/service_icons', $filename);
+            $path = $file->storeAs('public/testimonial_icons', $filename);
             $fullUrl = Storage::url($path);
             $testimonial->testimonial_icon = $fullUrl;
         }
@@ -480,7 +494,8 @@ class CardController extends Controller
         }
     }
 
-    public function updateSocialLinks(Request $request){
+    public function updateSocialLinks(Request $request)
+    {
         $vcardId = auth()->user()->vcard->id;
         $socialLinks = SocialLink::where('vcard_id', $vcardId)->first();
         if (!$socialLinks) {
@@ -499,10 +514,10 @@ class CardController extends Controller
         $socialLinks->save();
 
         return redirect()->back()->with('success', 'Social links updated successfully');
-
     }
 
-    public function uploadGallery(Request $request){
+    public function uploadGallery(Request $request)
+    {
         $user = auth()->user();
         $vcard = Vcard::where('user_id', $user->id)->first();
         $vcard_id = $vcard->id;
@@ -525,7 +540,8 @@ class CardController extends Controller
         }
     }
 
-    public function changeStatus($id){
+    public function changeStatus($id)
+    {
         $vcard = Vcard::find($id);
         $vcard->status = $vcard->status == 1 ? 0 : 1;
         $vcard->save();
@@ -548,7 +564,7 @@ class CardController extends Controller
             if ($user->contact) {
                 $response = $this->sendOtpSms($user->contact);
                 if ($response['type'] == 'success') {
-                    return redirect()->route('user.verify-otp',['mobile_number'=>$user->contact])->with('success', 'OTP sent successfully');
+                    return redirect()->route('user.verify-otp', ['mobile_number' => $user->contact])->with('success', 'OTP sent successfully');
                 } else {
                     return redirect()->back()->with('error', $response['message']);
                 }
@@ -579,28 +595,31 @@ class CardController extends Controller
         }
     }
 
-    public function verifyOtpForm(){
+    public function verifyOtpForm()
+    {
         $registerImage = Setting::where('key', 'register_image')->value('value');
-        return view('custom-views.user-dashboard.verify-otp',compact('registerImage'));
+        return view('custom-views.user-dashboard.verify-otp', compact('registerImage'));
     }
 
-    public function verifyOtp(Request $request){
+    public function verifyOtp(Request $request)
+    {
         $response = Http::withHeader('authkey', '358707AH4OkT3HJL6076a09dP1')
             ->get('https://control.msg91.com/api/v5/otp/verify', [
                 'mobile' => '91' . $request->mobile_number,
                 'otp' => $request->otp,
             ]);
         $responseData = $response->json();
-        if ($responseData['type'] == 'success'){
+        if ($responseData['type'] == 'success') {
             $user = User::where('contact', $request->mobile_number)->first();
             auth()->login($user);
             return redirect()->route('user.dashboard.index');
-        }else if ($responseData['type'] == 'error'){
+        } else if ($responseData['type'] == 'error') {
             return redirect()->back()->with('error', $responseData['message']);
         }
     }
 
-    public function cardCheckout(Request $request){
+    public function cardCheckout(Request $request)
+    {
         $userData = session()->get('logged_user_data');
 
         $user = User::find($userData->id);
@@ -611,15 +630,16 @@ class CardController extends Controller
 
         auth()->login($user);
 
-        $plan = Plan::where('id',session()->get('selectedPlan'))->first();
+        $plan = Plan::where('id', session()->get('selectedPlan'))->first();
 
         $faqs =  FrontFAQs::first();
 
-        return view('custom-views.user-dashboard.card-checkout',compact('user','plan','faqs'));
+        return view('custom-views.user-dashboard.card-checkout', compact('user', 'plan', 'faqs'));
     }
 
 
-    public function tempStoreStepFinalStepStore(Request $request){
+    public function tempStoreStepFinalStepStore(Request $request)
+    {
 
 
 
@@ -630,177 +650,176 @@ class CardController extends Controller
             'nfc_card_id' => $request->nfc_card_id,
         ]);
 
-//        $apiKey = '407cc3f4-22be-474e-b538-0aa1bba1da92';
-//        $merchantId = 'NEKINSANONLINE';
-//        $transactionID = "ST".rand(10,99).time();
-//        $userID =  $user->id;
-//        $redirectUrl = route('user.payment.confirmation');
-//
-//        $paymentData = array(
-//            'merchantId' => $merchantId,
-//            'merchantTransactionId' => "$transactionID",
-//            "merchantUserId"=>"$userID",
-//            'amount' => 1*100,
-//            'redirectUrl'=>"$redirectUrl",
-//            'redirectMode'=>"POST",
-//
-//            "merchantOrderId"=> "$transactionID",
-//            "mobileNumber"=>"$user->contact",
-//            "message"=>"Order description",
-//            "email"=>"$user->email",
-//            "shortName"=>"$user->first_name"."$user->last_name",
-//            "paymentInstrument"=> array(
-//                "type"=> "PAY_PAGE",
-//            )
-//        );
-//
-//        $jsonencode = json_encode($paymentData);
-//        $payloadMain = base64_encode($jsonencode);
-//
-//        $salt_index = 1;
-//        $payload = $payloadMain . "/pg/v1/pay" . $apiKey;
-//        $sha256 = hash("sha256", $payload);
-//        $final_x_header = $sha256 . '###' . $salt_index;
-//        $request = json_encode(array('request'=>$payloadMain));
-//
-//
-//
-//        $curl = curl_init();
-//        curl_setopt_array($curl, [
-//            CURLOPT_URL => "https://api.phonepe.com/apis/hermes/pg/v1/pay",
-//            CURLOPT_RETURNTRANSFER => true,
-//            CURLOPT_ENCODING => "",
-//            CURLOPT_MAXREDIRS => 10,
-//            CURLOPT_TIMEOUT => 30,
-//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//            CURLOPT_CUSTOMREQUEST => "POST",
-//            CURLOPT_POSTFIELDS => $request,
-//            CURLOPT_HTTPHEADER => [
-//                "Content-Type: application/json",
-//                "X-VERIFY: " . $final_x_header,
-//                "accept: application/json"
-//            ],
-//        ]);
-//
-//        $response = curl_exec($curl);
-//        $res = json_decode($response);
-//        $redirectUrl  = $res->data->instrumentResponse->redirectInfo->url;
+        //        $apiKey = '407cc3f4-22be-474e-b538-0aa1bba1da92';
+        //        $merchantId = 'NEKINSANONLINE';
+        //        $transactionID = "ST".rand(10,99).time();
+        //        $userID =  $user->id;
+        //        $redirectUrl = route('user.payment.confirmation');
+        //
+        //        $paymentData = array(
+        //            'merchantId' => $merchantId,
+        //            'merchantTransactionId' => "$transactionID",
+        //            "merchantUserId"=>"$userID",
+        //            'amount' => 1*100,
+        //            'redirectUrl'=>"$redirectUrl",
+        //            'redirectMode'=>"POST",
+        //
+        //            "merchantOrderId"=> "$transactionID",
+        //            "mobileNumber"=>"$user->contact",
+        //            "message"=>"Order description",
+        //            "email"=>"$user->email",
+        //            "shortName"=>"$user->first_name"."$user->last_name",
+        //            "paymentInstrument"=> array(
+        //                "type"=> "PAY_PAGE",
+        //            )
+        //        );
+        //
+        //        $jsonencode = json_encode($paymentData);
+        //        $payloadMain = base64_encode($jsonencode);
+        //
+        //        $salt_index = 1;
+        //        $payload = $payloadMain . "/pg/v1/pay" . $apiKey;
+        //        $sha256 = hash("sha256", $payload);
+        //        $final_x_header = $sha256 . '###' . $salt_index;
+        //        $request = json_encode(array('request'=>$payloadMain));
+        //
+        //
+        //
+        //        $curl = curl_init();
+        //        curl_setopt_array($curl, [
+        //            CURLOPT_URL => "https://api.phonepe.com/apis/hermes/pg/v1/pay",
+        //            CURLOPT_RETURNTRANSFER => true,
+        //            CURLOPT_ENCODING => "",
+        //            CURLOPT_MAXREDIRS => 10,
+        //            CURLOPT_TIMEOUT => 30,
+        //            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //            CURLOPT_CUSTOMREQUEST => "POST",
+        //            CURLOPT_POSTFIELDS => $request,
+        //            CURLOPT_HTTPHEADER => [
+        //                "Content-Type: application/json",
+        //                "X-VERIFY: " . $final_x_header,
+        //                "accept: application/json"
+        //            ],
+        //        ]);
+        //
+        //        $response = curl_exec($curl);
+        //        $res = json_decode($response);
+        //        $redirectUrl  = $res->data->instrumentResponse->redirectInfo->url;
 
 
 
-//
+        //
         auth()->login($user);
-
-
     }
 
     public function paymentConfirmation(Request $request)
-{
-    $userData = session()->get('logged_user_data');
-    $user = User::find($userData->id);
+    {
+        $userData = session()->get('logged_user_data');
+        $user = User::find($userData->id);
 
-    if (!$user) {
-        // Handle case where user is not found
-        return redirect()->back()->with('error', 'User not found');
+        if (!$user) {
+            // Handle case where user is not found
+            return redirect()->back()->with('error', 'User not found');
+        }
+
+        $apiKey = 'b12b5df3-d931-4d33-ba21-3e1c846384c7';
+        $merchantId = 'JIYOINDIAONLINE';
+        $saltIndex = 1;
+        $transactionID = "ST" . rand(10, 99) . time();
+        $redirectUrl = route('user.dashboard.index');
+        $userID = auth()->user()->id;
+
+        $paymentData = [
+            'merchantId' => $merchantId,
+            'merchantTransactionId' => $transactionID,
+            'merchantUserId' => $userID,
+            'amount' => 500 * 100, // Ensure amount is in correct format
+            'redirectUrl' => $redirectUrl,
+            'redirectMode' => 'GET',
+            'merchantOrderId' => $transactionID,
+            'mobileNumber' => $user->contact, // Ensure this is set in the user table
+            'message' => 'Order description',
+            'email' => $user->email,
+            'shortName' => $user->first_name . ' ' . $user->last_name,
+            'paymentInstrument' => [
+                'type' => 'PAY_PAGE',
+            ],
+        ];
+
+        // Encode the data
+        $jsonencode = json_encode($paymentData);
+
+        // Base64 encode the JSON payload
+        $payloadMain = base64_encode($jsonencode);
+
+        // Concatenate payload with API endpoint and API key
+        $payload = $payloadMain . "/pg/v1/pay" . $apiKey;
+
+        // Create the SHA256 hash
+        $sha256 = hash("sha256", $payload);
+
+        // Create the final X-VERIFY header
+        $final_x_header = $sha256 . '###' . $saltIndex;
+
+        // Prepare the request payload
+        $requestPayload = json_encode(['request' => $payloadMain]);
+
+        // Initialize cURL
+        $curl = curl_init();
+
+        // Set cURL options
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://api.phonepe.com/apis/hermes/pg/v1/pay",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $requestPayload,
+            CURLOPT_HTTPHEADER => [
+                "Content-Type: application/json",
+                "X-VERIFY: " . $final_x_header,
+                "accept: application/json"
+            ],
+        ]);
+
+        // Execute the cURL request
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        // Close the cURL session
+        curl_close($curl);
+
+        // Handle cURL errors
+        if ($err) {
+            return redirect()->back()->with('error', 'cURL Error: ' . $err);
+        }
+
+        // Decode the API response
+        $res = json_decode($response);
+
+        // Log response for debugging
+        \Log::info('Payment API Response:', (array)$res);
+
+        // Check if response is valid and contains redirect URL
+        if (isset($res->data->instrumentResponse->redirectInfo->url)) {
+            $redirectUrl = $res->data->instrumentResponse->redirectInfo->url;
+            return redirect()->away($redirectUrl);
+        } else {
+            // Handle API response error
+            return redirect()->back()->with('error', 'Invalid response from payment gateway');
+        }
     }
 
-    $apiKey = 'b12b5df3-d931-4d33-ba21-3e1c846384c7';
-    $merchantId = 'JIYOINDIAONLINE';
-    $saltIndex = 1;
-    $transactionID = "ST" . rand(10, 99) . time();
-    $redirectUrl = route('user.dashboard.index');
-    $userID = auth()->user()->id;
-
-    $paymentData = [
-        'merchantId' => $merchantId,
-        'merchantTransactionId' => $transactionID,
-        'merchantUserId' => $userID,
-        'amount' => 500 * 100, // Ensure amount is in correct format
-        'redirectUrl' => $redirectUrl,
-        'redirectMode' => 'GET',
-        'merchantOrderId' => $transactionID,
-        'mobileNumber' => $user->contact, // Ensure this is set in the user table
-        'message' => 'Order description',
-        'email' => $user->email,
-        'shortName' => $user->first_name . ' ' . $user->last_name,
-        'paymentInstrument' => [
-            'type' => 'PAY_PAGE',
-        ],
-    ];
-
-    // Encode the data
-    $jsonencode = json_encode($paymentData);
-
-    // Base64 encode the JSON payload
-    $payloadMain = base64_encode($jsonencode);
-
-    // Concatenate payload with API endpoint and API key
-    $payload = $payloadMain . "/pg/v1/pay" . $apiKey;
-
-    // Create the SHA256 hash
-    $sha256 = hash("sha256", $payload);
-
-    // Create the final X-VERIFY header
-    $final_x_header = $sha256 . '###' . $saltIndex;
-
-    // Prepare the request payload
-    $requestPayload = json_encode(['request' => $payloadMain]);
-
-    // Initialize cURL
-    $curl = curl_init();
-
-    // Set cURL options
-    curl_setopt_array($curl, [
-        CURLOPT_URL => "https://api.phonepe.com/apis/hermes/pg/v1/pay",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => "",
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTFIELDS => $requestPayload,
-        CURLOPT_HTTPHEADER => [
-            "Content-Type: application/json",
-            "X-VERIFY: " . $final_x_header,
-            "accept: application/json"
-        ],
-    ]);
-
-    // Execute the cURL request
-    $response = curl_exec($curl);
-    $err = curl_error($curl);
-
-    // Close the cURL session
-    curl_close($curl);
-
-    // Handle cURL errors
-    if ($err) {
-        return redirect()->back()->with('error', 'cURL Error: ' . $err);
-    }
-
-    // Decode the API response
-    $res = json_decode($response);
-
-    // Log response for debugging
-    \Log::info('Payment API Response:', (array)$res);
-
-    // Check if response is valid and contains redirect URL
-    if (isset($res->data->instrumentResponse->redirectInfo->url)) {
-        $redirectUrl = $res->data->instrumentResponse->redirectInfo->url;
-        return redirect()->away($redirectUrl);
-    } else {
-        // Handle API response error
-        return redirect()->back()->with('error', 'Invalid response from payment gateway');
-    }
-}
 
 
-
-    public function shareTapPermissions(){
+    public function shareTapPermissions()
+    {
         $userData = session()->get('logged_user_data');
         $sharetapId = $userData->vcard->id ?? 1;
         $shareTapPermissions = SharetapPermission::where('vcard_id', $sharetapId)->first();
-        return view('custom-views.user-dashboard.sharetap-permissions',compact('shareTapPermissions'));
+        return view('custom-views.user-dashboard.sharetap-permissions', compact('shareTapPermissions'));
     }
 
     public function updatePermissions(Request $request)
@@ -834,6 +853,4 @@ class CardController extends Controller
 
         return redirect()->route('user.dashboard.index')->with('success', 'Permissions updated successfully');
     }
-
-
 }

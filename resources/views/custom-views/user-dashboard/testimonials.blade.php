@@ -1,115 +1,191 @@
 @extends('custom-views.layouts.app')
+
 @section('title')
-    {{__('messages.dashboard')}}
+    {{ __('messages.dashboard') }}
 @endsection
+
 @section('content')
-<div>
-    <div class="container-fluid">
-        <div class="card shadow">
+    <div class="container-fluid py-4">
+        <div class="row mb-4 align-items-center">
+            <div class="col">
+                <h1 class="h2 mb-0">Testimonials</h1>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#testimonialModal">
+                    <i class="fas fa-plus me-2"></i>Add Testimonial
+                </button>
+            </div>
+        </div>
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible">
+                <ul class="m-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <div class="card shadow-sm">
             <div class="card-body p-0">
-                <div class="row p-2">
-                    <div class="col-md-12 p-2">
-                        <div class="d-flex justify-content-end" style="margin-right: 10px;">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                Add Testimonial
-                            </button>
-                        </div>
-                        <div>
-                            <table class="table table-striped">
-                                <thead>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0">Image</th>
+                                <th class="border-0">Name</th>
+                                <th class="border-0">Description</th>
+                                <th class="border-0">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($testimonials as $testimonial)
                                 <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Image</th>
-                                    <th scope="col">Action</th>
+                                    <td>
+                                        <img src="{{ $testimonial->testimonial_icon }}" alt="{{ $testimonial->name }}"
+                                            class="img-thumbnail" style=" height: 40px; object-fit: cover;">
+                                    </td>
+                                    <td>{{ $testimonial->name }}</td>
+                                    <td>
+                                        <p class="mb-0 text-muted" style="max-width: 300px;">
+                                            {{ Str::limit($testimonial->description, 100) }}
+                                        </p>
+                                    </td>
+
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ route('user.testimonials.edit', $testimonial->id) }}"
+                                                class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-edit me-1"></i>Edit
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-outline-danger delete-testimonial"
+                                                data-id="{{ $testimonial->id }}">
+                                                <i class="fas fa-trash-alt me-1"></i>Delete
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($testimonials as $testimonial)
-                                    <tr>
-                                        <td>{{ $testimonial->name }}</td>
-                                        <td>{{ $testimonial->description }}</td>
-                                        <td><img src="{{ $testimonial->testimonial_icon }}" alt="Image" width="100"></td>
-                                        <td>
-                                            <a href="{{ route('user.testimonials.edit',$testimonial->id) }}" class="btn btn-primary">Edit</a>
-                                            <form method="POST" action="{{ route('user.testimonials.delete',$testimonial->id) }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="modal fade" id="myModal">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">
-                                            New Testimonial
-                                        </h4>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-
-                                    <!-- Modal body -->
-                                    <div class="modal-body">
-                                        <form method="POST" action="{{ route('user.testimonials.update') }}"
-                                              accept-charset="UTF-8" enctype="multipart/form-data">
-                                            @csrf
-                                            <div class="mb-5"><input name="vcard_id" type="hidden" value="41"> <label
-                                                    for="name" class="form-label required">Name:</label> <input
-                                                    class="form-control" required="" placeholder="Enter Service Name"
-                                                    name="name" type="text" id="name"></div>
-
-                                            <div class="mb-5"><label for="description" class="form-label required">Description:</label>
-                                                <textarea class="form-control" placeholder="Enter Short Description"
-                                                          rows="5" required="" name="description" cols="50"
-                                                          id="description"></textarea></div>
-                                            <div class="mb-3" io-image-input="true"><label for="exampleInputImage"
-                                                                                           class="form-label required">Image:</label>
-                                                <div class="d-block">
-                                                    <div class="image-picker">
-                                                        <div class="image previewImage" id="servicePreview"
-                                                             style="background-image: url(http://127.0.0.1:8000/assets/images/default_service.png)"></div>
-                                                        <span class="picker-edit rounded-circle text-gray-500 fs-small"
-                                                              data-bs-toggle="tooltip" data-placement="top"
-                                                              data-bs-original-title="Change Image"> <label> <svg
-                                                                    class="svg-inline--fa fa-pen" id="profileImageIcon"
-                                                                    aria-hidden="true" focusable="false"
-                                                                    data-prefix="fas" data-icon="pen" role="img"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 512 512" data-fa-i2svg=""><path
-                                                                        fill="currentColor"
-                                                                        d="M362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32zM421.7 220.3L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3z"></path></svg>
-                                                                <!-- <i class="fa-solid fa-pen" id="profileImageIcon"></i> Font Awesome fontawesome.com --> <input
-                                                                    type="file" id="serviceIcon" name="service_icon"
-                                                                    class="image-upload file-validation d-none"
-                                                                    accept="image/*"> </label> </span></div>
-                                                    <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer pt-0">
-                                                <button type="submit" class="btn btn-primary m-0" id="serviceSave">Save
-                                                </button>
-                                                <button type="button" class="btn btn-secondary my-0 ms-5 me-0"
-                                                        data-bs-dismiss="modal">Discard
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                     </div>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-@endsection
+
+    <!-- Add/Edit Testimonial Modal -->
+    <form id="testimonialForm" method="POST" action="{{ route('user.testimonials.update') }}"
+        enctype="multipart/form-data">
+        @csrf
+        <div class="modal fade" id="testimonialModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="addServiceModalLabel">Add Testimonial</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="name" class="form-label required">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label required">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="testimonialIcon" class="form-label required">Image</label>
+                            <div>
+                                <div class="image-upload-container me-3">
+                                    <img id="testimonialPreview" class="img-thumbnail"
+                                        src="{{ asset('assets/images/default_service.png') }}"
+                                        alt="Testimonial Image Preview"
+                                        style="width: 100px; height: 100px; object-fit: cover;">
+                                    <div class="image-upload-overlay">
+                                        <label for="testimonialIcon" class="btn btn-sm btn-primary m-0">
+                                            <i class="fas fa-pen"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <input type="file" id="testimonialIcon" name="testimonial_icon" class="form-control"
+                                        accept="image/*">
+                                    <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveTestimonial">Save Testimonial</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <style>
+            .required:after {
+                content: " *";
+                color: red;
+            }
+
+            .image-upload-container {
+                position: relative;
+                display: inline-block;
+            }
+
+            .image-upload-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+
+            .image-upload-container:hover .image-upload-overlay {
+                opacity: 1;
+            }
+        </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const testimonialModal = new bootstrap.Modal(document.getElementById('testimonialModal'));
+                const deleteConfirmationModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+                const testimonialForm = document.getElementById('testimonialForm');
+                const testimonialIcon = document.getElementById('testimonialIcon');
+                const testimonialPreview = document.getElementById('testimonialPreview');
+                let deleteTestimonialId = null;
+
+                // Image preview
+                testimonialIcon.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            testimonialPreview.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+                // Form submission
+
+
+                // Reset form when modal is hidden
+                document.getElementById('testimonialModal').addEventListener('hidden.bs.modal', function() {
+                    testimonialForm.reset();
+                    document.getElementById('testimonial_id').value = '';
+                    testimonialPreview.src = "{{ asset('assets/images/default_service.png') }}";
+                    document.getElementById('testimonialModalLabel').textContent = 'Add Testimonial';
+                });
+            });
+        </script>
+    @endsection
