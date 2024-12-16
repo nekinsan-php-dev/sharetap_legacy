@@ -428,7 +428,7 @@ Route::middleware('auth', 'valid.user')->group(function () {
         //affiliate Users
         Route::get('/affiliate-users', [AffiliateUserController::class, 'index'])->name('sadmin.affiliate-user.index');
         //affiliation withdraw
-        Route::get('/affiliation-transactions',[AffiliationWithdrawController::class,'affiliationWithdraw',])->name('sadmin.affiliation-transaction.index');
+        Route::get('/affiliation-transactions', [AffiliationWithdrawController::class, 'affiliationWithdraw',])->name('sadmin.affiliation-transaction.index');
         //Withdraw transaction
         Route::get(
             '/withdraw-transactions',

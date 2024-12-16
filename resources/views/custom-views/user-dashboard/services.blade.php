@@ -17,13 +17,13 @@
                         @endforeach
                     </ul>
                 </div>
-
             @endif
 
             <div class="card shadow">
                 <div class="card-header">
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addServiceModal">
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                            data-target="#addServiceModal">
                             Add Service
                         </button>
                     </div>
@@ -45,8 +45,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
-                                        <img src="{{ $service->service_icon }}" alt="Service Icon"
-                                            height="30">
+                                        <img src="{{ $service->service_icon }}" alt="Service Icon" height="30">
                                     </td>
                                     <td>{{ $service->name }}</td>
                                     <td>{{ $service->description }}</td>
@@ -73,7 +72,8 @@
 
     <form method="POST" action="{{ route('user.services.update') }}" accept-charset="UTF-8" enctype="multipart/form-data">
         @csrf
-        <div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
 
@@ -87,24 +87,31 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="name" class="form-label required">Service Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Service Name" required>
+                            <input type="text" class="form-control" id="name" name="name"
+                                placeholder="Enter Service Name" required>
                         </div>
                         <div class="mb-3">
                             <label for="service_url" class="form-label">Service URL</label>
-                            <input type="url" class="form-control" id="service_url" name="service_url" placeholder="Enter Service URL">
+                            <input type="url" class="form-control" id="service_url" name="service_url"
+                                placeholder="Enter Service URL">
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label required">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter Short Description" required></textarea>
+                            <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter Short Description"
+                                required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="serviceIcon" class="form-label required">Service Icon</label>
                             <div>
                                 <div class="me-3">
-                                    <img id="servicePreview" class=" border" style="width: 80px; height: 80px; object-fit: cover;" src="http://127.0.0.1:8000/assets/images/default_service.png" alt="Service Icon Preview">
+                                    <img id="servicePreview" class=" border"
+                                        style="width: 80px; height: 80px; object-fit: cover;"
+                                        src="http://127.0.0.1:8000/assets/images/default_service.png"
+                                        alt="Service Icon Preview">
                                 </div>
                                 <div>
-                                    <input type="file" id="serviceIcon" name="service_icon" class="form-control" accept="image/*" onchange="previewServiceIcon(event)">
+                                    <input type="file" id="serviceIcon" name="service_icon" class="form-control"
+                                        accept="image/*" onchange="previewServiceIcon(event)">
                                     <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
                                 </div>
                             </div>
@@ -129,7 +136,7 @@
 
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     preview.style.backgroundImage = `url(${e.target.result})`;
                     preview.src = e.target.result;
                 };
