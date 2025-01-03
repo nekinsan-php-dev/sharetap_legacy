@@ -6,10 +6,10 @@
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                {{-- <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"> --}}
+                <img src="{{ auth()->user()->profile_img }}" style="height: 40px; width: 40px; border-radius: 50%; object-fit: cover;" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#"
+                <a href="{{ route('user.profile.edit') }}"
                     class="d-block">{{ auth()->user()->first_name . ' ' . (auth()->user()->last_name ?? 'Full Name') }}</a>
             </div>
         </div>
