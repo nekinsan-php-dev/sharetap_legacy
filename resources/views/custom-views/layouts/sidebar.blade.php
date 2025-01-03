@@ -10,7 +10,7 @@
             </div>
             <div class="info">
                 <a href="{{ route('user.profile.edit') }}"
-                    class="d-block">{{ auth()->user()->first_name . ' ' . (auth()->user()->last_name ?? 'Full Name') }}</a>
+                    class="d-block text-capitalize">{{ auth()->user()->first_name . ' ' . (auth()->user()->last_name ?? 'Full Name') }}</a>
             </div>
         </div>
 
