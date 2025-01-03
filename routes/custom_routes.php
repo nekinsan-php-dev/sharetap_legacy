@@ -3,6 +3,11 @@
 use App\Http\Controllers\CustomController\CardController;
 use App\Http\Controllers\CustomController\UserDashboardController;
 
+
+
+Route::post('/check-email', [CardController::class, 'checkEmail'])->name('card.check-email');
+Route::post('/check-mobile', [CardController::class, 'checkMobile'])->name('card.check-mobile');
+
 // Guest routes
 Route::group(['prefix' => 'user'], function () {
     Route::get('login', [UserDashboardController::class, 'login'])->name('user.login');
@@ -22,6 +27,8 @@ Route::group(['prefix' => 'card/create'], function () {
     Route::post('step-3', [CardController::class, 'tempStoreStepThreeStore'])->name('card.temp-store-step-three-store');
     Route::get('final-step', [CardController::class, 'tempStoreStepFinalStep'])->name('card.final-step');
     Route::post('final-step', [CardController::class, 'tempStoreStepFinalStepStore'])->name('card.final-step');
+
+
 });
 
 Route::get('card/checkout', [CardController::class, 'cardCheckout'])->name('card.checkout');

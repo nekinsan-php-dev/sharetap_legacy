@@ -853,4 +853,32 @@ class CardController extends Controller
 
         return redirect()->route('user.dashboard.index')->with('success', 'Permissions updated successfully');
     }
+
+    public function checkEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        $exists = User::where('email', $request->email)->exists();
+
+        return response()->json([
+            'status' => !$exists,
+            'message' => $exists ? 'Email already exists' : 'Email available'
+        ]);
+    }
+
+    public function checkMobile(Request $request)
+    {
+        $request->validate([
+            'mobile' => ['required', 'regex:/^[0-9]{10}$/']
+        ]);
+
+        $exists = User::where('contact', $request->mobile)->exists();
+
+        return response()->json([
+            'status' => !$exists,
+            'message' => $exists ? 'Mobile number already exists' : 'Mobile number available'
+        ]);
+    }
 }
