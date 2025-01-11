@@ -9,7 +9,7 @@
         <h2 class="text-primary font-weight-bold">Register Your Information</h2>
         <p class="text-muted">Please fill in the details below to create your profile.</p>
     </div>
-    <form class="form-custom needs-validation" action="{{ route('card.tempStore') }}" method="post" novalidate>
+    <form class="form-custom needs-validation" action="{{ route('card.tempStore') }}" method="post">
         @csrf
         <div class="card shadow border-0 bg-white mb-5">
             <div class="card-body">
@@ -146,14 +146,14 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const step1 = document.getElementById('step1');
+   const step1 = document.getElementById('step1');
     const step2 = document.getElementById('step2');
     const prevBtn = document.getElementById('prevStep');
     const nextBtn = document.getElementById('nextStep');
     const submitBtn = document.getElementById('submitBtn');
     const form = document.querySelector('.needs-validation');
 
-      const errorMessages = {
+    const errorMessages = {
         firstName: {
             required: 'First name is required',
             invalid: 'First name should only contain letters (2-50 characters)',
@@ -172,7 +172,6 @@ document.addEventListener('DOMContentLoaded', function() {
         mobile: {
             required: 'Mobile number is required',
             invalid: 'Please enter a valid 10-digit mobile number',
-            tooShort: 'Mobile number must be 10 digits',
             exists: 'This mobile number is already registered'
         },
     };
@@ -195,10 +194,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 setFieldError(emailInput, errorMessages.email.exists);
                 return false;
             }
+            setFieldValid(emailInput);
             return true;
         } catch (error) {
             console.error('Error checking email:', error);
-            return true; // Allow form submission on network error
+            return true;
         }
     };
 
@@ -220,10 +220,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 setFieldError(mobileInput, errorMessages.mobile.exists);
                 return false;
             }
+            setFieldValid(mobileInput);
             return true;
         } catch (error) {
             console.error('Error checking mobile:', error);
-            return true; // Allow form submission on network error
+            return true;
         }
     };
 
@@ -233,6 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const feedback = element.nextElementSibling;
         if (feedback && feedback.classList.contains('invalid-feedback')) {
             feedback.textContent = message;
+            feedback.style.display = 'block';
         }
     };
 
@@ -242,6 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const feedback = element.nextElementSibling;
         if (feedback && feedback.classList.contains('invalid-feedback')) {
             feedback.textContent = '';
+            feedback.style.display = 'none';
         }
     };
 
@@ -250,6 +253,32 @@ document.addEventListener('DOMContentLoaded', function() {
             .toLowerCase()
             .match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
     };
+
+    // Mobile number input handler
+    const mobileInput = document.getElementById('mobile_number');
+    if (mobileInput) {
+        mobileInput.addEventListener('input', function(e) {
+            // Remove any non-digit characters
+            let value = this.value.replace(/\D/g, '');
+
+            // Limit to 10 digits
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+
+            // Update input value
+            this.value = value;
+
+            // Validate and show/hide error message
+            if (value.length === 10) {
+                setFieldValid(this);
+            } else if (value.length > 0) {
+                setFieldError(this, errorMessages.mobile.invalid);
+            } else {
+                setFieldError(this, errorMessages.mobile.required);
+            }
+        });
+    }
 
     const validateStep1Fields = async () => {
         const firstNameEl = document.getElementById('first_name');
@@ -261,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let isValid = true;
 
-        // First Name validation (keep existing validation)
+        // First Name validation
         if (!firstNameEl.value.trim()) {
             setFieldError(firstNameEl, errorMessages.firstName.required);
             isValid = false;
@@ -275,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setFieldValid(firstNameEl);
         }
 
-        // Last Name validation (keep existing validation)
+        // Last Name validation
         if (!lastNameEl.value.trim()) {
             setFieldError(lastNameEl, errorMessages.lastName.required);
             isValid = false;
@@ -289,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setFieldValid(lastNameEl);
         }
 
-        // Email validation with availability check
+        // Email validation
         if (!emailEl.value.trim()) {
             setFieldError(emailEl, errorMessages.email.required);
             isValid = false;
@@ -298,44 +327,35 @@ document.addEventListener('DOMContentLoaded', function() {
             isValid = false;
         } else {
             const emailAvailable = await checkEmailAvailability(emailEl.value);
-            if (!emailAvailable) {
-                isValid = false;
-            } else {
-                setFieldValid(emailEl);
-            }
+            isValid = emailAvailable && isValid;
         }
 
-        // Mobile validation with availability check
+        // Mobile validation
         if (!mobileEl.value.trim()) {
             setFieldError(mobileEl, errorMessages.mobile.required);
             isValid = false;
-        } else if (mobileEl.value.length < 10) {
-            setFieldError(mobileEl, errorMessages.mobile.tooShort);
-            isValid = false;
-        } else if (!mobileEl.value.match(/^[0-9]{10}$/)) {
+        } else if (mobileEl.value.length !== 10) {
             setFieldError(mobileEl, errorMessages.mobile.invalid);
             isValid = false;
         } else {
             const mobileAvailable = await checkMobileAvailability(mobileEl.value);
-            if (!mobileAvailable) {
-                isValid = false;
-            } else {
-                setFieldValid(mobileEl);
-            }
+            isValid = mobileAvailable && isValid;
         }
 
-        return isValid;
-    };
-
-    const validateStep2Fields = () => {
-        const locationEl = document.getElementById('location');
-        let isValid = true;
-
-        if (!locationEl.value.trim()) {
-            setFieldError(locationEl, 'Location is required');
+        // Date of Birth validation
+        if (!dateOfBirthEl.value) {
+            setFieldError(dateOfBirthEl, 'Date of birth is required');
             isValid = false;
         } else {
-            setFieldValid(locationEl);
+            setFieldValid(dateOfBirthEl);
+        }
+
+        // Gender validation
+        if (!genderEl.value) {
+            setFieldError(genderEl, 'Please select your gender');
+            isValid = false;
+        } else {
+            setFieldValid(genderEl);
         }
 
         return isValid;
@@ -417,6 +437,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+
+ const validateStep2Fields = () => {
+        const locationEl = document.getElementById('location');
+        const occupationEl = document.getElementById('occupation');
+        let isValid = true;
+
+        // Location is required
+        if (!locationEl.value.trim()) {
+            setFieldError(locationEl, 'Location is required');
+            isValid = false;
+        } else {
+            setFieldValid(locationEl);
+        }
+
+        // Add validation for occupation if it's required
+        if (occupationEl && !occupationEl.value.trim()) {
+            setFieldError(occupationEl, 'Occupation is required');
+            isValid = false;
+        } else if (occupationEl) {
+            setFieldValid(occupationEl);
+        }
+
+        return isValid;
+    };
     // Form submission handler
       form.addEventListener('submit', async function(event) {
         event.preventDefault();
