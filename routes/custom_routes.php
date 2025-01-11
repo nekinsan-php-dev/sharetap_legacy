@@ -2,8 +2,7 @@
 
 use App\Http\Controllers\CustomController\CardController;
 use App\Http\Controllers\CustomController\UserDashboardController;
-
-
+use App\Http\Controllers\New\PaymentController;
 
 Route::post('/check-email', [CardController::class, 'checkEmail'])->name('card.check-email');
 Route::post('/check-mobile', [CardController::class, 'checkMobile'])->name('card.check-mobile');
@@ -32,7 +31,7 @@ Route::group(['prefix' => 'card/create'], function () {
 });
 
 Route::get('card/checkout', [CardController::class, 'cardCheckout'])->name('card.checkout');
-Route::post('payment/confirmation', [CardController::class, 'paymentConfirmation'])->name('user.payment.confirmation');
+Route::post('payment/confirmation', [PaymentController::class, 'paymentConfirmation'])->name('user.payment.confirmation');
 
 // Authenticated user routes
 Route::middleware(['auth'])->group(function () {
